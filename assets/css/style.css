@@ -256,6 +256,8 @@ p { margin: 0 0 1.2em; }
 }
 .news-summary::-webkit-details-marker { display: none; }
 .news-summary:hover .news-title { color: var(--accent); }
+.news-static .news-summary { cursor: default; }
+.news-static:hover .news-title { color: var(--fg); }
 .news-date { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .news-title {
   font-family: var(--font-head); font-weight: 400;

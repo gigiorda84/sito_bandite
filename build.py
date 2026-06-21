@@ -57,6 +57,8 @@ TR = {
  "news_h": "News", "back_about": "&#8249; Back to About",
  "home_intro": "BANDITE is a collective founded in 2023 by Valentina Bosio and Simona Sala, two artists whose research and creative practices meet at the intersection of art and activism. Their work is rooted in an anthropological approach to physical theatre and moves fluidly across theatre, dance, visual arts, video, and multimedia technologies. Their urgency lies in observing and narrating what remains at the margins: stories and identities rendered invisible or forgotten by dominant narratives.",
  "news": [
+   {"date":"3&ndash;5 July 2026","title":"Master Salute Collettiva &ndash; Residenziale Oulx, Val di Susa &ndash; Università di Parma","text":""},
+   {"date":"3&ndash;4 October 2026","title":"Rifugiati in rifugio","text":""},
    {"date":"Mar&ndash;Jun 2026","title":"Esistenze Plurali &mdash; intersezioni di cartografie sensibili","text":"A participatory, performative workshop project conceived and curated by BANDITE within Torino Multisemiotica (University of Turin). Addressed to young people aged 18&ndash;25 with migratory backgrounds, it turns multilingualism and cultural difference into generative resources, culminating in a living, multimedia archive."},
    {"date":"13 Nov 2025","title":"Resonavisse&rsquo;s first event: let&rsquo;s party together","text":"To celebrate the birth of RESONAVISSE, an evening at Ramo d&rsquo;Oro (Galleria Umberto I, Turin) between exhibition, immersive installation, electroacoustic live performance and DJ set &mdash; terracotta works by Massimiliano Todisco, <em>Al&egrave;theia || traces</em> by Simona Sala, live music by Mildred and Ansss. Opening 6:30 PM, live 7:30 PM."},
    {"date":"New &middot; 2025","title":"Resonavisse &mdash; our new cultural association","text":"RESONAVISSE &mdash; from the Latin <em>resonare</em>, &ldquo;to resonate&rdquo; &mdash; is now officially active: a cultural and artistic association conceived as a living space for exploration, creation and sharing, where artistic practices, human experiences and different forms of knowledge meet."},
@@ -149,6 +151,8 @@ TR = {
  "news_h": "Novit&agrave;", "back_about": "&#8249; Torna a Chi siamo",
  "home_intro": "BANDITE è un collettivo fondato nel 2023 da Valentina Bosio e Simona Sala, due artiste la cui ricerca e pratica creativa si incontrano all&rsquo;intersezione tra arte e attivismo. Il loro lavoro affonda le radici in un approccio antropologico al teatro fisico e si muove fluidamente tra teatro, danza, arti visive, video e tecnologie multimediali. La loro urgenza sta nell&rsquo;osservare e raccontare ciò che resta ai margini: storie e identità rese invisibili o dimenticate dalle narrazioni dominanti.",
  "news": [
+   {"date":"3&ndash;5 luglio 2026","title":"Master Salute Collettiva &ndash; Residenziale Oulx, Val di Susa &ndash; Università di Parma","text":""},
+   {"date":"3&ndash;4 ottobre 2026","title":"Rifugiati in rifugio","text":""},
    {"date":"Mar&ndash;Giu 2026","title":"Esistenze Plurali &mdash; intersezioni di cartografie sensibili","text":"Un progetto laboratoriale partecipativo e performativo ideato e curato dal collettivo BANDITE nell&rsquo;ambito di Torino Multisemiotica (Università di Torino). Rivolto a giovani tra i 18 e i 25 anni con background migratorio, trasforma multilinguismo e differenze culturali in risorse generative, culminando in un archivio vivente e multimediale."},
    {"date":"13 nov 2025","title":"Il primo evento di Resonavisse: festeggiamo insieme","text":"Per celebrare la nascita di RESONAVISSE, una serata al Ramo d&rsquo;Oro (Galleria Umberto I, Torino) tra esposizione, installazione immersiva, live elettroacustico e DJ set &mdash; terrecotte di Massimiliano Todisco, <em>Al&egrave;theia || traces</em> di Simona Sala, musica live di Mildred e Ansss. Apertura 18:30, live 19:30."},
    {"date":"Novit&agrave; &middot; 2025","title":"Resonavisse &mdash; la nostra nuova associazione culturale","text":"RESONAVISSE &mdash; dal latino <em>resonare</em>, &ldquo;essere risuonato&rdquo; &mdash; è ora ufficialmente attiva: un&rsquo;associazione culturale e artistica immaginata come spazio vivo di esplorazione, creazione e condivisione, dove pratiche artistiche, esperienze umane e saperi diversi si incontrano."},
@@ -233,6 +237,8 @@ TR = {
  "news_h": "Actualités", "back_about": "&#8249; Retour à À propos",
  "home_intro": "BANDITE est un collectif fondé en 2023 par Valentina Bosio et Simona Sala, deux artistes dont la recherche et la pratique créative se rejoignent à l&rsquo;intersection de l&rsquo;art et de l&rsquo;activisme. Leur travail s&rsquo;enracine dans une approche anthropologique du théâtre physique et circule librement entre théâtre, danse, arts visuels, vidéo et technologies multimédia. Leur urgence : observer et raconter ce qui demeure aux marges, ces histoires et identités rendues invisibles ou oubliées par les récits dominants.",
  "news": [
+   {"date":"3&ndash;5 juillet 2026","title":"Master Salute Collettiva &ndash; Residenziale Oulx, Val di Susa &ndash; Università di Parma","text":""},
+   {"date":"3&ndash;4 octobre 2026","title":"Rifugiati in rifugio","text":""},
    {"date":"Mars&ndash;Juin 2026","title":"Esistenze Plurali &mdash; intersezioni di cartografie sensibili","text":"Un projet d&rsquo;atelier participatif et performatif conçu et organisé par le collectif BANDITE dans le cadre de Torino Multisemiotica (Université de Turin). Destiné aux jeunes de 18 à 25 ans issus de parcours migratoires, il transforme le plurilinguisme et la différence culturelle en ressources génératives, aboutissant à une archive vivante et multimédia."},
    {"date":"13 nov. 2025","title":"Le premier événement de Resonavisse : fêtons ensemble","text":"Pour célébrer la naissance de RESONAVISSE, une soirée au Ramo d&rsquo;Oro (Galleria Umberto I, Turin) entre exposition, installation immersive, performance live électroacoustique et DJ set &mdash; terres cuites de Massimiliano Todisco, <em>Al&egrave;theia || traces</em> de Simona Sala, musique live de Mildred et Ansss. Ouverture 18h30, live 19h30."},
    {"date":"Nouveau &middot; 2025","title":"Resonavisse &mdash; notre nouvelle association culturelle","text":"RESONAVISSE &mdash; du latin <em>resonare</em>, &laquo;&nbsp;avoir résonné&nbsp;&raquo; &mdash; est désormais officiellement active : une association culturelle et artistique conçue comme un espace vivant d&rsquo;exploration, de création et de partage, où se rencontrent pratiques artistiques, expériences humaines et savoirs multiples."},
@@ -440,13 +446,20 @@ def build_all(lang):
     BR = "BANDITE"
 
     # ---- HOME ----
-    news = "\n        ".join(
-        '<details class="news-item"><summary class="news-summary">'
-        '<time class="news-date">{d}</time><span class="news-title">{t}</span>'
-        '<span class="news-toggle" aria-hidden="true"></span></summary>'
-        '<div class="news-content"><p class="news-text">{x}</p></div></details>'.format(d=n["date"], t=n["title"], x=n["text"])
-        for n in L["news"]
-    )
+    _news = []
+    for n in L["news"]:
+        if n.get("text"):
+            _news.append(
+                '<details class="news-item"><summary class="news-summary">'
+                '<time class="news-date">{d}</time><span class="news-title">{t}</span>'
+                '<span class="news-toggle" aria-hidden="true"></span></summary>'
+                '<div class="news-content"><p class="news-text">{x}</p></div></details>'.format(d=n["date"], t=n["title"], x=n["text"]))
+        else:
+            _news.append(
+                '<div class="news-item news-static"><div class="news-summary">'
+                '<time class="news-date">{d}</time><span class="news-title">{t}</span>'
+                '</div></div>'.format(d=n["date"], t=n["title"]))
+    news = "\n        ".join(_news)
     home = """
   <section class="hero hero--home" style="background-image:url('/assets/img/hero-home.jpg')">
     <h1 class="sr-only">BANDITE &mdash; artivism</h1>
