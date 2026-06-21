@@ -93,7 +93,7 @@ p { margin: 0 0 1.2em; }
   color: var(--fg); padding-bottom: 4px;
 }
 .brand:hover { color: var(--fg); }
-.brand span { color: var(--accent); }
+.brand span { color: inherit; }
 
 .nav { display: flex; align-items: center; gap: 26px; }
 .nav a {
