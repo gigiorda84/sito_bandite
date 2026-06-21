@@ -118,6 +118,50 @@ def slideshow(images, alt="BANDITE"):
 # ============================================================
 # HOME
 # ============================================================
+# News items (newest / featured first). href=None -> not linked.
+NEWS = [
+    {
+        "date": "Mar&ndash;Jun 2026",
+        "title": "Esistenze Plurali &mdash; intersezioni di cartografie sensibili",
+        "text": "A participatory, performative workshop project conceived and curated by BANDITE within Torino Multisemiotica (University of Turin). Addressed to young people aged 18&ndash;25 with migratory backgrounds, it turns multilingualism and cultural difference into generative resources, culminating in a living, multimedia archive.",
+        "href": None,
+    },
+    {
+        "date": "13 Nov 2025",
+        "title": "Resonavisse&rsquo;s first event: let&rsquo;s party together",
+        "text": "To celebrate the birth of RESONAVISSE, an evening at Ramo d&rsquo;Oro (Galleria Umberto I, Turin) between exhibition, immersive installation, electroacoustic live performance and DJ set &mdash; terracotta works by Massimiliano Todisco, <em>Al&egrave;theia || traces</em> by Simona Sala, live music by Mildred and Ansss. Opening 6:30 PM, live 7:30 PM.",
+        "href": "resonavisse.html",
+    },
+    {
+        "date": "New &middot; 2025",
+        "title": "Resonavisse &mdash; our new cultural association",
+        "text": "RESONAVISSE &mdash; from the Latin <em>resonare</em>, &ldquo;to resonate&rdquo; &mdash; is now officially active: a cultural and artistic association conceived as a living space for exploration, creation and sharing, where artistic practices, human experiences and different forms of knowledge meet.",
+        "href": "resonavisse.html",
+    },
+    {
+        "date": "Work in progress",
+        "title": "Unseen#1 &mdash; Montgen&egrave;vre &ndash; La Vachette (France)",
+        "text": "A new site-specific artwork on the story of Blessing Matthew, co-produced with Universit&eacute; Grenoble Alpes for the DisFrontAlp research by geographer Cristina Del Biaggio, made possible by &ldquo;Soutien aux projets de recherche en cr&eacute;ation 2025&rdquo; from SFR Cr&eacute;ation.",
+        "href": "unseen.html",
+    },
+]
+
+def news_items():
+    out = []
+    for n in NEWS:
+        tag = "a" if n["href"] else "div"
+        href = ' href="%s"' % n["href"] if n["href"] else ""
+        arrow = '<span class="news-arrow" aria-hidden="true">&#8594;</span>' if n["href"] else ""
+        out.append(
+            '<{tag} class="news-item"{href}>'
+            '<time class="news-date">{date}</time>'
+            '<div class="news-main"><h3 class="news-title">{title}{arrow}</h3>'
+            '<p class="news-text">{text}</p></div>'
+            '</{tag}>'.format(tag=tag, href=href, date=n["date"], title=n["title"],
+                              arrow=arrow, text=n["text"])
+        )
+    return "\n        ".join(out)
+
 home_body = """
   <section class="hero" style="background-image:url('assets/img/hero-home.jpg')">
     <div class="wrap hero__inner">
@@ -135,7 +179,16 @@ home_body = """
       </div>
     </div>
   </section>
-"""
+
+  <section class="section news" id="news">
+    <div class="wrap">
+      <h2 class="news-heading">News</h2>
+      <div class="news-list">
+        __NEWS__
+      </div>
+    </div>
+  </section>
+""".replace("__NEWS__", news_items())
 page("index.html", "BANDITE — artivism",
      "BANDITE is an art-activism collective founded in 2023 by Valentina Bosio and Simona Sala, working at the border between Italy and France through sonic walkscapes, performance and memory.",
      home_body, current="index.html")
