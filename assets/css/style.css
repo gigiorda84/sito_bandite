@@ -12,8 +12,8 @@
   font-display: swap;
 }
 @font-face {
-  font-family: "Sailors Condensed";
-  src: url("../fonts/sailors-condensed.woff2") format("woff2");
+  font-family: "Sailors";
+  src: url("../fonts/sailors.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -21,7 +21,7 @@
 
 :root {
   --font-display: "Handelson Five", "Brush Script MT", cursive;
-  --font-head: "Sailors Condensed", "DM Sans", system-ui, sans-serif;
+  --font-head: "Sailors", "DM Sans", system-ui, sans-serif;
   --bg: #fafafa;
   --fg: #292724;
   --muted: #6b665f;
