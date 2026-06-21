@@ -1,504 +1,30 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-BANDITE static site generator.
-Regenerates all HTML pages in this directory from the content defined below.
-Run from the repository root:  python3 build.py
+BANDITE static site generator — trilingual (EN root, IT in /it/, FR in /fr/).
+All text content lives in TR below. Run from the repo root:  python3 build.py
 """
 import os, html
 
-OUT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE_URL = "https://bandite.eu"
+LANGS = ["en", "it", "fr"]
 
-# Navigation: (file, label)
+# Pages in the nav: (filename, nav-key)
 NAV = [
-    ("about.html", "About"),
-    ("works.html", "Works"),
-    ("sonic-walkscape.html", "Sonic WalkScape"),
-    ("resonavisse.html", "Resonavisse"),
-    ("stampa.html", "Stampa"),
-    ("collaborations.html", "Collaborations"),
-    ("contacts.html", "Contacts"),
+    ("about.html", "about"),
+    ("works.html", "works"),
+    ("sonic-walkscape.html", "sonic"),
+    ("resonavisse.html", "resonavisse"),
+    ("stampa.html", "press"),
+    ("collaborations.html", "collaborations"),
+    ("contacts.html", "contacts"),
 ]
 
-def head(title, desc, current, og_image="assets/img/hero-home.jpg"):
-    nav = "\n".join(
-        '      <a href="{f}"{cur}>{l}</a>'.format(
-            f=f, l=html.escape(l),
-            cur=' aria-current="page"' if f == current else "")
-        for f, l in NAV
-    )
-    return """<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{title}</title>
-  <meta name="description" content="{desc}">
-  <link rel="canonical" href="{site}/{current}">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="{title}">
-  <meta property="og:description" content="{desc}">
-  <meta property="og:image" content="{site}/{og}">
-  <meta property="og:url" content="{site}/{current}">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" type="image/png" href="assets/img/favicon.png">
-  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-  <link rel="preload" href="assets/fonts/roboto-condensed.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/handelson-five.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/barlow-condensed-300.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-  <header class="site-header">
-    <div class="wrap site-header__inner">
-      <a class="brand" href="index.html" aria-label="BANDITE — artivism"><img src="assets/img/bandite-wordmark.svg" alt="BANDITE — artivism" width="118" height="66"></a>
-      <button class="nav-toggle" aria-label="Menu" aria-controls="nav" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <nav class="nav" id="nav">
-{nav}
-      </nav>
-    </div>
-  </header>
-""".format(title=html.escape(title), desc=html.escape(desc), current=current,
-           site=SITE_URL, og=og_image, nav=nav)
-
-FOOT = """
-  <footer class="site-footer">
-    <div class="wrap site-footer__inner">
-      <div>
-        <img class="fbrand" src="assets/img/bandite-wordmark.svg" alt="BANDITE — artivism" width="150" height="84">
-        <p style="margin:.8em 0 0">Turin — Val di Susa</p>
-      </div>
-      <div class="cols">
-        <div>
-          <a href="contacts.html">Contacts</a><br>
-          <a href="mailto:resonavisse@gmail.com">resonavisse@gmail.com</a>
-        </div>
-        <div>
-          <a href="works.html">Works</a><br>
-          <a href="sonic-walkscape.html">Sonic WalkScape app</a>
-        </div>
-      </div>
-    </div>
-    <div class="wrap" style="margin-top:28px;font-size:.8rem;opacity:.7">
-      © <span id="yr">2026</span> BANDITE — Valentina Bosio &amp; Simona Sala. Photos by Mauro Ujetto.
-    </div>
-  </footer>
-  <script src="assets/js/main.js"></script>
-  <script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
-</body>
-</html>
-"""
-
-def page(filename, title, desc, body, current=None, og_image="assets/img/hero-home.jpg"):
-    cur = current if current is not None else filename
-    htmlout = head(title, desc, cur, og_image) + body + FOOT
-    with open(os.path.join(OUT, filename), "w", encoding="utf-8") as f:
-        f.write(htmlout)
-    print("wrote", filename)
-
-def slideshow(images, alt="BANDITE"):
-    slides = "".join(
-        '<div class="slide"><img src="{0}" alt="{1}" loading="lazy"></div>'.format(src, html.escape(alt))
-        for src in images
-    )
-    return """<div class="gallery">
-  <div class="slides">
-    <div class="slides__track">{slides}</div>
-    <button class="slides__btn slides__btn--prev" aria-label="Previous">&#8249;</button>
-    <button class="slides__btn slides__btn--next" aria-label="Next">&#8250;</button>
-  </div>
-  <div class="slides__dots"></div>
-</div>""".format(slides=slides)
-
-# ============================================================
-# HOME
-# ============================================================
-# News items (newest / featured first). href=None -> not linked.
-NEWS = [
-    {
-        "date": "Mar&ndash;Jun 2026",
-        "title": "Esistenze Plurali &mdash; intersezioni di cartografie sensibili",
-        "text": "A participatory, performative workshop project conceived and curated by BANDITE within Torino Multisemiotica (University of Turin). Addressed to young people aged 18&ndash;25 with migratory backgrounds, it turns multilingualism and cultural difference into generative resources, culminating in a living, multimedia archive.",
-        "href": None,
-    },
-    {
-        "date": "13 Nov 2025",
-        "title": "Resonavisse&rsquo;s first event: let&rsquo;s party together",
-        "text": "To celebrate the birth of RESONAVISSE, an evening at Ramo d&rsquo;Oro (Galleria Umberto I, Turin) between exhibition, immersive installation, electroacoustic live performance and DJ set &mdash; terracotta works by Massimiliano Todisco, <em>Al&egrave;theia || traces</em> by Simona Sala, live music by Mildred and Ansss. Opening 6:30 PM, live 7:30 PM.",
-        "href": "resonavisse.html",
-    },
-    {
-        "date": "New &middot; 2025",
-        "title": "Resonavisse &mdash; our new cultural association",
-        "text": "RESONAVISSE &mdash; from the Latin <em>resonare</em>, &ldquo;to resonate&rdquo; &mdash; is now officially active: a cultural and artistic association conceived as a living space for exploration, creation and sharing, where artistic practices, human experiences and different forms of knowledge meet.",
-        "href": "resonavisse.html",
-    },
-    {
-        "date": "Work in progress",
-        "title": "Unseen#1 &mdash; Montgen&egrave;vre &ndash; La Vachette (France)",
-        "text": "A new site-specific artwork on the story of Blessing Matthew, co-produced with Universit&eacute; Grenoble Alpes for the DisFrontAlp research by geographer Cristina Del Biaggio, made possible by &ldquo;Soutien aux projets de recherche en cr&eacute;ation 2025&rdquo; from SFR Cr&eacute;ation.",
-        "href": "unseen.html",
-    },
-]
-
-def news_items():
-    out = []
-    for n in NEWS:
-        out.append(
-            '<details class="news-item">'
-            '<summary class="news-summary">'
-            '<time class="news-date">{date}</time>'
-            '<span class="news-title">{title}</span>'
-            '<span class="news-toggle" aria-hidden="true"></span>'
-            '</summary>'
-            '<div class="news-content"><p class="news-text">{text}</p></div>'
-            '</details>'.format(date=n["date"], title=n["title"], text=n["text"])
-        )
-    return "\n        ".join(out)
-
-home_body = """
-  <section class="hero hero--home" style="background-image:url('assets/img/hero-home.jpg')">
-    <h1 class="sr-only">BANDITE &mdash; artivism</h1>
-  </section>
-
-  <section class="section">
-    <div class="wrap read prose justify">
-      <p>BANDITE is a collective founded in 2023 by Valentina Bosio and Simona Sala, two artists whose research and creative practices meet at the intersection of art and activism. Their work is rooted in an anthropological approach to physical theatre and moves fluidly across theatre, dance, visual arts, video, and multimedia technologies. Their urgency lies in observing and narrating what remains at the margins: stories and identities rendered invisible or forgotten by dominant narratives.</p>
-      <div class="btn-row">
-        <a class="btn btn--accent" href="works.html">Explore the works</a>
-        <a class="btn" href="sonic-walkscape.html">Sonic WalkScape app</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section news" id="news">
-    <div class="wrap">
-      <h2 class="news-heading">News</h2>
-      <div class="news-list">
-        __NEWS__
-      </div>
-    </div>
-  </section>
-""".replace("__NEWS__", news_items())
-page("index.html", "BANDITE — artivism",
-     "BANDITE is an art-activism collective founded in 2023 by Valentina Bosio and Simona Sala, working at the border between Italy and France through sonic walkscapes, performance and memory.",
-     home_body, current="index.html")
-
-# ============================================================
-# ABOUT
-# ============================================================
-about_body = """
-  <div class="wrap page-head read">
-    <div class="kicker">The collective</div>
-    <h1>About</h1>
-  </div>
-  <div class="wrap">
-    <figure class="emblem"><img src="assets/img/bandite-emblem.webp" alt="BANDITE — illustration of the collective" width="440" height="440" loading="lazy"></figure>
-  </div>
-  <section class="section--tight">
-    <div class="wrap read prose justify">
-      <p>BANDITE is a collective founded in 2023 by Valentina Bosio and Simona Sala, two artists whose research and creative practices meet at the intersection of art and activism. Their work is rooted in an anthropological approach to physical theatre and moves fluidly across theatre, dance, visual arts, video, and multimedia technologies. Their aim is to move beyond traditional performative languages by interweaving diverse expressive codes, restoring theatre to its nature as a collective space&mdash;a place for reflection and confrontation with the complexities of the present. Their urgency lies in observing and narrating what remains at the margins: stories and identities rendered invisible or forgotten by dominant narratives.</p>
-      <p>BANDITE&rsquo;s practice is grounded in an understanding of art as a practice of crossing&mdash;capable of connecting territories, languages, and communities. The collective continuously seeks to build spaces of dialogue between bodies and memories, between the real and the digital, between the present and the ancestral. The objective is not to represent, but to activate: to generate experiences in which the audience becomes part of a collective ritual of listening, awareness, and transmission. Their methodology draws on <em>Witness Action</em>, an interactive and participatory approach to performance developed from 2015 by Simona Sala in collaboration with the director of the Grotowski Institute (PL). This approach moves beyond aesthetics to activate collective witnessing processes, fostering mutual dignity and social engagement through art.</p>
-      <p>In 2024, BANDITE created <em>Presenti Mai Assenti</em> (&ldquo;Present, Never Absent&rdquo;), a site-specific immersive soundwalk conceived for CommemorAction&mdash;a day of resistance against the deadly regime of borders. The piece unfolds along the migratory route between Claviere (Italy) and Montgen&egrave;vre (France). Participants walk while listening via headphones to an original sound composition blending field recordings, Mediterranean and Chiapas chants, and the poetry of Rahma Nur, layered with the sound of their footsteps and the surrounding landscape. That same year, BANDITE also curated the exhibition <em>Orizzonti Verticali &ndash; Sulle tracce di memorie esuli</em> (<em>Vertical Horizons &ndash; In the Footsteps of Exiled Memories</em>), hosted in the Torre Delfinale in Oulx, a symbolic waypoint on the migratory route to France. The exhibition featured photographs, audiovisual works, drawings, objects, and installations by Enrico Carpegna, Beppe Gromi, Fabio Russo, and Simona Sala. It explored themes of walking, memory, and horizon, functioning as a &ldquo;memory activator&rdquo; that sparked personal recollections among visitors&mdash;often linked to the region&rsquo;s own history of hardship and marginality in the Alpine borderlands.</p>
-      <p>Continuing this trajectory, BANDITE has developed a new site-specific project, <em>Unseen</em> (2026), set between Montgen&egrave;vre and La Vachette near Brian&ccedil;on (France). Thanks also to the contribution of SFR Cr&eacute;ation, a program run by the University of Grenoble Alpes, in this project they have designed and developed a customized app called Sonic WalkScape, which makes all the immersive walks BANDITE has produced easily accessible to participants. <em>Unseen</em> invites audiences to engage with the story of Blessing Matthew, a young woman who died at this border in May 2018. Her death was investigated by a group of researchers, including Border Forensics and geographer Cristina Del Biaggio, as part of a broader inquiry into the deaths of people on the move at Europe&rsquo;s frontiers. In the past year, BANDITE has been invited to present their work at various academic conferences intersecting the fields of border art, activism, migration, and the humanities, contributing to broader conversations around artistic practices as tools of political engagement and collective memory.</p>
-      <div class="btn-row">
-        <a class="btn" href="simona-sala.html">Simona Sala</a>
-        <a class="btn" href="valentina-bosio.html">Valentina Bosio</a>
-      </div>
-    </div>
-  </section>
-"""
-page("about.html", "About — BANDITE",
-     "BANDITE is a collective founded in 2023 by Valentina Bosio and Simona Sala, working at the intersection of art and activism.",
-     about_body)
-
-# ============================================================
-# VALENTINA BOSIO
-# ============================================================
-valentina_body = """
-  <div class="wrap page-head read">
-    <div class="kicker">Bandite</div>
-    <h1>Valentina Bosio</h1>
-  </div>
-  <section class="section--tight">
-    <div class="wrap read prose justify">
-      <p>Valentina Bosio is a performer, artivist and community activator. Her authorial research focuses particularly on themes such as body-scape, borders, archive and memory, moving freely between the re-mediation and proposition of a language that intersects codes of theatre, dance and new media.</p>
-      <p>Her multidisciplinary background began with a two-year intensive program in physical theatre and performing arts at Philip Radice&rsquo;s Atelier Teatro Fisico in Turin. In 2019/20, she participated in Daniele Ninarello&rsquo;s permanent research and composition laboratory Il Corpo Intuitivo. In 2020, she obtained an Executive Master&rsquo;s degree, completing a final project focused on the valorisation of the landscape and cultural heritage of Alpine cross-border territories through Social and Community Theatre Methodology. This project led her to explore the mountain territories between France and Italy for two years. Valentina graduated from the University of Turin in DAMS &ndash; Disciplines of Art, Music, and Performance &ndash; with a research thesis on dance and educational innovation, specifically examining the decolonial practice of the Italian artist and choreographer Salvo Lombardo (2023). Significant were the gatherings and collaborations with artists such as Virgilio Sieni, Daniele Ninarello, Silvia Gribaudi, Sara Leghissa, Giulia Rae and Davide Enia. Between 2018 and 2020, she was part of the young theatre formation Nouvelle Plague, which also participated as a resident company at the Torino Fringe Festival 2019 with La Semimbecille e altre storie, a theatre work concerning the study of female hysteria, its interpretation in the context of 19th century psychology, in comparison with the stigma of people stigmatized as psychiatrically ill nowadays. In 2021 she founded the collective Volpi Metropolitane, a trans-media performing arts project, with which she experimented also video and digital language, especially related to the concept of tiers paysage proposed by Cl&eacute;ment, and the body as landscape with the project erbacce perenni. In 2023 she first joined the international projects of Ponte tra Culture soc.coop. Italia, beginning to collaborate together with Gianluca Barbadori and Simona Sala.</p>
-      <p>Currently she&rsquo;s working in the Alps border between Italy and France with the actress and visual artist Simona Sala, with whom she founded the collective BANDITE in 2023. Bandite aims to transcend purely performative language, developing a fusion of diverse codes and forms of expression that reclaim theatre as a collective space and a privileged observatory for engaging with and comprehending contemporaneity. Their latest projects explored themes such as memory, witnessing, cross-border migratory movements, and culminate in site-specific works on the cross-border territory between Italy and France. Their work involves numerous collaborations, especially with the community and local realities, and partnerships with entities including Ponte tra Culture soc.coop. Italia, the Grotowski Institute in Wroc&lstrok;aw, Universit&eacute; Grenoble Alpes and Pacte social science laboratory in Grenoble.</p>
-      <div class="btn-row"><a class="btn" href="about.html">&#8249; Back to About</a></div>
-    </div>
-  </section>
-"""
-page("valentina-bosio.html", "Valentina Bosio — BANDITE",
-     "Valentina Bosio is a performer, artivist and community activator, co-founder of BANDITE.",
-     valentina_body, current="about.html")
-
-# ============================================================
-# SIMONA SALA
-# ============================================================
-simona_body = """
-  <div class="wrap page-head read">
-    <div class="kicker">Bandite</div>
-    <h1>Simona Sala</h1>
-  </div>
-  <section class="section--tight">
-    <div class="wrap read prose justify">
-      <p>Simona Sala is a visual artist, actress and performer.</p>
-      <p>In 2006 she founded the performing arts company Sineglossa. Since 2011 she has been working at the Grotowski Institute in Wroclaw (PL) within the company Teatr Zar in the performances Armine, sister and Medee On getting Across, with which she participates in numerous festivals including San Francisco International Arts Festival and Paris Th&eacute;&acirc;tre de la Temp&ecirc;te. In 2011 she collaborates with Fundacja Jubilo with the 3-year project Unlocking in Wroclaw Penitentiary No.1 with long-sentence inmates. Between 2015 and 2018 she organized field travels to Salvador de Bahia to study and research Candombl&eacute; rituals and to southern Iran (Abadan) for possession rituals. In the same years she collaborated with Jaros&lstrok;aw Fret, director of Teatr Zar, on the creation of Witness Action, a new interactive and participatory approach to performance, with the aim of moving beyond the artistic experience that is proposed as aesthetic, with a view to activating an approach linked instead to personal identity and dignity. Between 2015 and 2017 she organizes conferences and public actions in which audiences and artists discuss how art and artists can witness and act in the sphere of action, through a new rituality of participation. In 2019 she starts working on her latest work Al&egrave;theia, creating site-specific installations around the theme of what cannot be hidden and on the relationship with memory and witness. In 2022 she makes a field trip to Chiapas, Mexico with Giovanna Maroccolo&rsquo;s Fusion Art Center following a political and social instance within Zapatista communities.</p>
-      <p>Since 2023 she has been collaborating with the association On Borders, an ethnographic research laboratory on border crossings, on a field project between Italy and France.</p>
-      <p><a href="https://simonasala.com/" target="_blank" rel="noopener">www.simonasala.com</a></p>
-      <div class="btn-row"><a class="btn" href="about.html">&#8249; Back to About</a></div>
-    </div>
-  </section>
-"""
-page("simona-sala.html", "Simona Sala — BANDITE",
-     "Simona Sala is a visual artist, actress and performer, co-founder of BANDITE.",
-     simona_body, current="about.html")
-
-# ============================================================
-# WORKS
-# ============================================================
-works_body = """
-  <div class="wrap page-head read">
-    <div class="kicker">Projects</div>
-    <h1>Works</h1>
-    <p class="sub">Site-specific sonic walkscapes, exhibitions and immersive installations along the Italian&ndash;French Alpine border.</p>
-  </div>
-  <section class="section--tight">
-    <div class="wrap read">
-      <div class="work-list">
-        <a class="work-item" href="unseen.html">
-          <h3>Unseen</h3><span class="meta">Montgen&egrave;vre &middot; 2026</span><span class="arrow">&#8594;</span>
-        </a>
-        <a class="work-item" href="orizzonti-verticali.html">
-          <h3>Orizzonti Verticali</h3><span class="meta">Oulx &middot; 2024</span><span class="arrow">&#8594;</span>
-        </a>
-        <a class="work-item" href="presenti-mai-assenti.html">
-          <h3>Presenti Mai Assenti</h3><span class="meta">Claviere &middot; 2024</span><span class="arrow">&#8594;</span>
-        </a>
-      </div>
-    </div>
-  </section>
-"""
-page("works.html", "Works — BANDITE",
-     "The works of BANDITE: Unseen, Orizzonti Verticali and Presenti Mai Assenti — sonic walkscapes and immersive installations on the Alpine border.",
-     works_body)
-
-# ============================================================
-# UNSEEN
-# ============================================================
-unseen_body = """
-  <section class="hero hero--page" style="background-image:url('assets/img/unseen-hero.jpg')">
-    <div class="wrap hero__inner">
-      <h1 class="hero__title">Unseen</h1>
-      <p class="hero__tag">Montgen&egrave;vre &mdash; La Vachette (FR) &middot; 2026</p>
-    </div>
-  </section>
-  <section class="section--tight">
-    <div class="wrap read prose justify">
-      <h2 style="text-align:left">Sonic WalkScape at the border</h2>
-      <p><strong>UNSEEN</strong> was created to remember Blessing Matthew and all those who have lost their lives crossing borders. This sonic walkscape is dedicated to them&mdash;an immersive walk that seeks to restore voice to stories forced into invisibility.</p>
-      <p>This Sonic WalkScape follows the paths between Montgen&egrave;vre and La Vachette through a journey of listening and, at the same time, participation, as an act of collective memory. An immersive sonic narrative composed of voices, sounds, and landscapes, it is presented on the occasion of Commemor-Action 2026, the international day of struggle against the regime of death and violence at borders and in remembrance of the victims of border policies. The score is made up of testimonies from activists and volunteers, field recordings, sounds and original music, together with data on the case of Blessing Matthew gathered by geographer and researcher Cristina Del Biaggio&mdash;who took part in the counter-investigation alongside Border Forensics and the association Toutes et Tous Migrants. Through a custom app developed by BANDITE, the public is invited to walk along the mapped route, with an invitation to immerse themselves in the sounds and in the traversal of the Alpine border landscape.</p>
-      <p>Sonic WalkScape is a format conceived by the collective BANDITE that brings together artistic and sonic practice, fieldwork, and the active involvement of local communities. Developed through a custom app, it takes shape as a site-specific and participatory work capable of weaving together territory, memory, and community through storytelling and walking. Each Sonic WalkScape is reworked and reconfigured according to the context in which it emerges. It functions as a mobile sound installation in which participants, equipped with smartphones and headphones, are guided along a defined route via a map with geolocated points. At each point, original audio content&mdash;voices, testimonies, songs, field recordings, and environmental sounds&mdash;activates, gathered and composed during fieldwork or created specifically for the piece. The walk thus becomes an in/visible itinerary made of layered sonic and narrative traces, offering a sensitive and plural reading of the place.</p>
-      <hr>
-      <p>UNSEEN nasce per ricordare <strong>Blessing Matthew</strong> e tutte le persone che hanno perso la vita attraversando le frontiere. <em>A loro &egrave; dedicata questa sonic walkscape, una cammino sonora che vuole restituire voce alle storie che vengono costrette all&rsquo;invisibilit&agrave;.</em></p>
-      <p>Questa <strong>Sonic WalkScape</strong> attraversa i sentieri tra Montgen&egrave;vre e La Vachette attraverso un viaggio d&rsquo;ascolto, e al tempo stesso partecipazione, in un atto di memoria collettiva. Un racconto sonoro immersivo fatto di voci, suoni e paesaggi, presentato in occasione della Commemor-Action 2026, la giornata internazionale di lotta contro il regime di morte e violenza delle frontiere, e ricordo delle vittime delle politiche di frontiera. La partitura &egrave; composta da testimonianze di attivist&euml; e volontari&euml;, field recordings, suoni e musiche originali, uniti ai dati sul caso di Blessing Matthew raccolti dalla geografa e ricercatrice Cristina Del Biaggio &ndash; che ha partecipato alla contro-inchiesta insieme a Border Forensics e all&rsquo;associazione Toutes et Tous Migrants. Attraverso un&rsquo;app personalizzata e sviluppata da BANDITE, il pubblico &egrave; invitato a camminare seguendo il percorso indicato da una mappa, con l&rsquo;invito ad immergersi nei suoni e nell&rsquo;attraversamento del paesaggio alpino frontaliero.</p>
-      <div class="credits">
-        Creazione e drammaturgia <em>Bandite</em><br>
-        Montaggio audio, sound design, mix <em>Valeria Miracapillo</em><br>
-        Voci <em>Cristina Del Biaggio, Simona Sala, Alice Ruotolo &ndash; Gruppo Abele, Silvia Massara &ndash; Sentieri Solidali, Davide Rostan, Nicolas Toselli, Michel Rousseau &ndash; Toutes et Tous Migrants, Theo, Ana&iuml;s Leduc, Herv&eacute;, Christiana Obie</em><br>
-        Canti <em>Jean-Fran&ccedil;ois Favreau, Aleksandra Kotecka, Collectif f&eacute;ministe du Brian&ccedil;onnais</em><br>
-        Beat in traccia &ldquo;Il caso&rdquo; <em>Calogero Dario Bufalino Maranella</em><br>
-        Sviluppo app <em>Giuseppe Giordano</em><br>
-        Valorizzazione della ricerca &laquo;La mort de Blessing Matthew &ndash; Une contre-enqu&ecirc;te sur la violence aux fronti&egrave;res alpines&raquo; (2022), <em>Border Forensics, Toutes et Tous Migrants</em><br>
-        Progetto vincitore del bando <em>SFR Cr&eacute;ation &ndash; Arts in the Alps, Universit&eacute; Grenoble Alpes</em><br>
-        Produzione <em>BANDITE</em><br>
-        Con il contributo di <em>Maison de la Cr&eacute;ation et de l&rsquo;Innovation (MaCI), Pacte &ndash; Laboratoire de sciences sociales, Universit&eacute; Grenoble Alpes</em><br>
-        Foto <em>Mauro Ujetto</em>
-      </div>
-      <div class="btn-row"><a class="btn btn--accent" href="sonic-walkscape.html">Download the app &amp; how to walk</a></div>
-    </div>
-  </section>
-  <div class="wrap read">
-    <div class="figure"><img src="assets/img/unseen-info.jpg" alt="UNSEEN — practical information" loading="lazy"></div>
-  </div>
-"""
-page("unseen.html", "Unseen — BANDITE",
-     "UNSEEN (2026) is a sonic walkscape between Montgenèvre and La Vachette, created to remember Blessing Matthew and all those who lost their lives crossing borders.",
-     unseen_body, current="works.html", og_image="assets/img/unseen-hero.jpg")
-
-# ============================================================
-# ORIZZONTI VERTICALI
-# ============================================================
-ov_imgs = ["assets/img/ov-%d.jpg" % i for i in range(1, 9)]
-ov_body = """
-  <div class="wrap page-head read">
-    <div class="kicker">Exhibition / immersive installation</div>
-    <h1>Orizzonti Verticali</h1>
-    <p class="sub">Sulle tracce di memorie esuli &middot; Oulx (IT) &middot; 2024</p>
-  </div>
-  <section class="section--tight">
-    <div class="wrap read prose justify">
-      <p><em>orizzonti verticali_sulle tracce di memorie esuli</em> is an exhibition conceived as an immersive installation, the result of the synergy of a local community in dialogue with the territory, joined in the aim of elevating itself from the dimension it inhabits and lives everyday toward a multifaceted and hybrid horizon. The common vision aims to catch what often remains invisible or poorly concealed, giving voice to the exiles of the past and present, men and women determined to project their stories &ndash; and desires &ndash; forward.</p>
-      <p>The idea is to shift the perspective on the world we know and rethink the journey: the one taken by thousands of people driven to escape a ruined world in an attempt to create other possible futures. Vertical horizons was born, then, to look up and tear apart the veil of what is familiar and known to us; to do so, first of all, there is also a need to stumble. The fall, in fact, represents a necessary condition without which the rise could not take place. It is the stumbling that we never consider steps backward, but rather that movement of retreating backwardness that &ndash; like the waves of the sea &ndash; retreats to gain impetus and move forward with stubborn determination. This exhibition is evoked in a liminal place, with the aim of setting our gaze on interstitial spaces as spaces that are, also, generative. To pierce, first and foremost, our own horizons and take flight into new perspectives.</p>
-      <div class="credits">
-        <em>production and artistic direction</em> BANDITE<br>
-        <em>exhibition by</em> Enrico Carpegna, Beppe Gromi and Fabio Russo, Simona Sala<br>
-        <em>organization</em> Valentina Bosio, Martina Pasqualetto, Simona Sala<br>
-        <em>texts and research consultancy</em> Valentina Bosio, Piero Gorza, Martina Pasqualetto<br>
-        <em>photo</em> Mauro Ujetto<br>
-        <em>under the patronage of</em> the Municipality of Oulx<br>
-        <em>with the support of</em> Abb&agrave; SAS, Action For odv, Recycle For Refugees Campaign, Clarea Wines of Chiomonte, Associazione Liberamente Insieme of Bardonecchia, On Borders, Sentieri Solidali
-      </div>
-    </div>
-    <div class="wrap">
-      __SLIDESHOW__
-    </div>
-  </section>
-""".replace("__SLIDESHOW__", slideshow(ov_imgs, "Orizzonti Verticali — exhibition"))
-page("orizzonti-verticali.html", "Orizzonti Verticali — BANDITE",
-     "Orizzonti Verticali — sulle tracce di memorie esuli: an immersive exhibition by BANDITE in Oulx (2024).",
-     ov_body, current="works.html", og_image="assets/img/ov-1.jpg")
-
-# ============================================================
-# PRESENTI MAI ASSENTI
-# ============================================================
-pma_imgs = ["assets/img/pma-%d.jpg" % i for i in range(1, 9)]
-pma_body = """
-  <div class="wrap page-head read">
-    <div class="kicker">Sonic WalkScape</div>
-    <h1>Presenti Mai Assenti</h1>
-    <p class="sub">Claviere &mdash; Montgen&egrave;vre &middot; 2024</p>
-  </div>
-  <section class="section--tight">
-    <div class="wrap read prose justify">
-      <p>Site-specific sonic walkscape created in Claviere, the last Italian village on the border with France.</p>
-      <p>Using a simple smartphone app, participants are invited to follow geolocated points on a map that lead along an easy stretch of a migration route travelled by thousands of illegalised people every year. The walk is an immersive experience, composed of sounds, field recordings, Mediterranean songs, and poems by Rahma Nur, all of which overlap with the sounds of one&rsquo;s footsteps and the surrounding landscape. This experience &ndash; which can be shared collectively and enjoyed at any time &ndash; constitutes a profoundly personal and introspective moment, where voice and sound dialogue with silences, an integral part of the soundscape. By prompting reflection on the challenges faced by people on the move every day along migratory routes, it seeks to pay tribute to those who have lost their lives attempting to cross these mountains.</p>
-      <p>The intent of this soundwalk is to engage participants/travellers in an active process of witnessing and memorisation, ensuring that the stories and voices of people compelled to migrate in search of freedom and improved living conditions remain ever present, never absent.</p>
-      <div class="credits">
-        <em>Sound installation and field recordings</em> BANDITE &ndash; Valentina Bosio, Simona Sala<br>
-        <em>Sound editing</em> Giuseppe Giordano, Jacopo Salvatore<br>
-        <em>Songs</em> Marjan Vahdat, Selda &Ouml;zturk<br>
-        <em>Poems</em> Rahma Nur / from <em>The Cry and the Whisper</em> &ndash; Capovolte editrice<br>
-        <em>In collaboration with</em> Sentieri Solidali, On Borders<br>
-        <em>Photo credits</em> Mauro Ujetto<br>
-        <em>Video</em> Francesco Arrigoni
-      </div>
-    </div>
-    <div class="wrap">
-      __SLIDESHOW__
-    </div>
-  </section>
-""".replace("__SLIDESHOW__", slideshow(pma_imgs, "Presenti Mai Assenti — Claviere"))
-page("presenti-mai-assenti.html", "Presenti Mai Assenti — BANDITE",
-     "Presenti Mai Assenti — a site-specific sonic walkscape created by BANDITE in Claviere on the Italian–French border (2024).",
-     pma_body, current="works.html", og_image="assets/img/pma-1.jpg")
-
-# ============================================================
-# SONIC WALKSCAPE (download)
-# ============================================================
-sonic_body = """
-  <div class="wrap page-head read">
-    <div class="kicker">The app</div>
-    <h1>Sonic WalkScape</h1>
-    <p class="sub">Click to download BANDITE&rsquo;s app <em>Sonic WalkScape</em> &middot; Scarica l&rsquo;app di Bandite</p>
-  </div>
-  <section class="section--tight">
-    <div class="wrap read">
-      <div class="btn-row">
-        <a class="btn btn--accent" href="https://apps.apple.com/it/app/sonicwalkscape/id6757606425?l=en-GB" target="_blank" rel="noopener">Download for iPhone</a>
-        <a class="btn btn--accent" href="https://play.google.com/store/apps/details?id=com.bandite.sonicwalkscape" target="_blank" rel="noopener">Download for Android</a>
-      </div>
-      <div class="figure"><img src="assets/img/sonic-dossier.png" alt="Sonic WalkScape — UNSEEN" loading="lazy"></div>
-      <div class="prose">
-        <h3 style="color:#b8860b">COSA TI SERVE?</h3>
-        <p><strong>Cuffie</strong> o <strong>auricolari</strong> da collegare al tuo smartphone.<br>
-        <strong>Telefono</strong> con batteria carica.<br>
-        <strong>Scarpe e abiti</strong> adatti per un itinerario di <strong>montagna</strong>: controlla sempre il <strong>meteo</strong> prima di partire, il bollettino delle allerte valanghe, e in caso di neve assicurati di avere scarpe alte ed eventualmente bacchette e ciaspole.</p>
-        <h3 style="color:#b8860b">COME FARE UNA SONIC WALKSCAPE?</h3>
-        <p>&ndash; <strong>Scarica l&rsquo;app Sonic WalkScape</strong>: scannerizza il QR code che trovi sul primo cartello a Monginevro o clicca sui pulsanti qui sopra per accedere al tuo Apple Store o Play Store.<br>
-        &ndash; Entra nell&rsquo;app e accedi alle <strong>impostazioni</strong> cliccando sulla rotellina in alto a destra: seleziona la <strong>lingua</strong> di preferenza, e <strong>attiva</strong> la <strong>geolocalizzazione</strong> del tuo dispositivo.<br>
-        &ndash; Torna all&rsquo;homepage e <strong>inizia ad esplorare</strong>: cerca e seleziona dalla mappa la Sonic WalkScape che vuoi fare, cliccando su UNSEEN o PRESENTI MAI ASSENTI.<br>
-        &ndash; Ora <strong>Inizia Tour</strong> &ndash; seleziona lingua, sottotitoli (sono presenti registrazioni in lingua italiana, francese e inglese), e fai il <strong>download del tour</strong> (per l&rsquo;uso anche offline).<br>
-        &ndash; Prima di iniziare &egrave; importante cliccare sulle finestre di autorizzazione per l&rsquo;uso dei dati di posizione del tuo telefono (gps): clicca su <strong>consenti sempre</strong>.<br>
-        &ndash; Vai vicino al <strong>punto di partenza</strong> del tour: per Unseen arriva al parcheggio <strong>Chalmettes</strong>, poi continua a camminare fino al parco avventure <em>Games in forest</em>, facendo attenzione al passaggio che attraversa le piste da sci. Assicurati di seguire il percorso e raggiungere i punti indicati sulla mappa, fino alla conclusione dell&rsquo;itinerario presso il villaggio di La Vachette.</p>
-        <p>Al termine della Sonic WalkScape troverai sull&rsquo;app le indicazioni per i bus che ti riportano a Monginevro (&egrave; possibile fare il biglietto a bordo &ndash; costo di 2,20&euro;).<br>
-        Puoi lasciare un feedback sull&rsquo;app e seguirci sui nostri canali social, o iscriverti alla nostra newsletter.</p>
-      </div>
-    </div>
-  </section>
-"""
-page("sonic-walkscape.html", "Sonic WalkScape — BANDITE",
-     "Download BANDITE's Sonic WalkScape app for iPhone and Android, and learn how to experience the immersive geolocated soundwalks.",
-     sonic_body)
-
-# ============================================================
-# RESONAVISSE
-# ============================================================
-resonavisse_body = """
-  <section class="hero hero--page" style="background-image:url('assets/img/resonavisse-hero.jpg')">
-    <div class="wrap hero__inner">
-      <h1 class="hero__title">Resonavisse</h1>
-    </div>
-  </section>
-  <section class="section--tight">
-    <div class="wrap read prose justify">
-      <p><strong>Resonavisse</strong> &ndash; from the Latin <em>resonare</em>, <em>to have resounded</em> &ndash; is a cultural and artistic association born from the desire to create a living space for exploration, creation, and sharing: a space for encounters and creative contamination between art, human experience, and multiple knowledges.</p>
-      <p>The association pursues cultural, artistic, and social aims, placing at its core the experimentation with artistic languages as a means to express one&rsquo;s presence in the world, to awaken critical awareness, and to foster consciousness and transformation. We believe in art as a relational practice and a tool to engage, awaken, and activate those who encounter it. We support both practical and theoretical research, and we nurture the meeting of bodies, stories, and visions through expressive forms ranging from performance to theatre, from sculpture to voice, from sound to audiovisual creations.</p>
-      <hr>
-      <p><strong>Resonavisse</strong> &ndash; dal latino <em>resonare</em>, <em>essere risuonato</em> &ndash; &egrave; un&rsquo;associazione culturale e artistica nata con l&rsquo;intento di creare uno spazio vivo di esplorazione, creazione e condivisione, un luogo dove possono incontrarsi e contaminarsi pratiche artistiche, esperienze umane e saperi diversi.</p>
-      <p>L&rsquo;associazione persegue finalit&agrave; culturali, artistiche e sociali, mettendo al centro la sperimentazione dei linguaggi dell&rsquo;arte come veicolo per esprimere la propria presenza nel mondo, attivare lo sguardo critico, generare consapevolezza e trasformazione. Crediamo nell&rsquo;arte come pratica relazionale e strumento per sensibilizzare e attivare chi la incontra. Promuoviamo la ricerca pratica e teorica, e coltiviamo l&rsquo;incontro tra corpi, storie e visioni attraverso forme espressive che spaziano dalla performance al teatro, dalla scultura alla voce, dal suono alle creazioni audiovisive.</p>
-    </div>
-    <div class="wrap read">
-      <div class="figure figure--center"><img src="assets/img/resonavisse-logo.png" alt="Resonavisse" loading="lazy"></div>
-    </div>
-  </section>
-"""
-page("resonavisse.html", "Resonavisse — BANDITE",
-     "Resonavisse is a cultural and artistic association — a living space for exploration, creation and sharing between art, human experience and multiple knowledges.",
-     resonavisse_body, og_image="assets/img/resonavisse-hero.jpg")
-
-# ============================================================
-# STAMPA (press)
-# ============================================================
-press = [
-    ("Luna nuova", "06.03.2026 / Susanna Torasso", "assets/docs/lunanuova-6-marzo-2026-1.pdf"),
-    ("Altreconomia", "11.02.2026 / Alessia Cesana", "assets/docs/altreconomia11febr2026.pdf"),
-    ("Labex ITTEM", "09.02.2026 / Art and science: a learned jumble", "assets/docs/art-and-science_-a-learned-jumble-e28093-labex-ittem-eng.pdf"),
-    ("Labex ITTEM", "27.01.2026 / Unseen &ndash; Balade sonore &agrave; la fronti&egrave;re", "assets/docs/unseen-e28093-balade-sonore-a-la-frontiere-e28093-labex-ittem-1.pdf"),
-    ("Carnets de g&eacute;ographes 19", "2025 / Cristina Del Biaggio", "assets/docs/cdg-11060.pdf"),
-    ("Pacte &ndash; Laboratoire de sciences sociales", "22.05.2025 / Pushing Border Art&rsquo;s Borders &ndash; session #3", "assets/docs/pushing-border-arts-borders-session-3-_-pacte-laboratoire-de-sciences-sociales.pdf"),
-]
-press_items = "\n".join(
-    '        <a href="{href}" target="_blank" rel="noopener"><span><span class="src">{src}</span><br><span class="who">{who}</span></span><span class="dl">Open PDF &#8594;</span></a>'.format(
-        href=href, src=src, who=who)
-    for src, who, href in press
-)
-stampa_body = """
-  <div class="wrap page-head read">
-    <div class="kicker">Press</div>
-    <h1>Rassegna stampa</h1>
-    <p class="sub">Articles, reviews and academic contributions on BANDITE&rsquo;s work.</p>
-  </div>
-  <section class="section--tight">
-    <div class="wrap read">
-      <div class="press">
-__ITEMS__
-      </div>
-    </div>
-  </section>
-""".replace("__ITEMS__", press_items)
-page("stampa.html", "Stampa — BANDITE",
-     "Press review: articles, reviews and academic contributions on BANDITE's work.",
-     stampa_body)
-
-# ============================================================
-# COLLABORATIONS
-# ============================================================
-logos = [
+# ---------- shared assets (not translated) ----------
+PMA_IMGS = ["/assets/img/pma-%d.jpg" % i for i in range(1, 9)]
+OV_IMGS = ["/assets/img/ov-%d.jpg" % i for i in range(1, 9)]
+LOGOS = [
     ("col-ponte.png", "Ponte tra Culture"),
     ("col-grenoble.png", "Université Grenoble Alpes"),
     ("col-resonavisse.png", "Resonavisse"),
@@ -507,65 +33,642 @@ logos = [
     ("col-sentieri.jpeg", "Sentieri Solidali"),
     ("col-cor.png", "COR"),
 ]
-logo_items = "\n".join(
-    '        <figure><img src="assets/img/{src}" alt="{alt}" loading="lazy"></figure>'.format(
-        src=src, alt=html.escape(alt))
-    for src, alt in logos
-)
-collab_body = """
-  <div class="wrap page-head read">
-    <div class="kicker">Network</div>
-    <h1>Collaborations</h1>
-    <p class="sub">Alliances and collaborations established over these years.</p>
+PRESS = [
+    ("Luna nuova", "06.03.2026 / Susanna Torasso", "/assets/docs/lunanuova-6-marzo-2026-1.pdf"),
+    ("Altreconomia", "11.02.2026 / Alessia Cesana", "/assets/docs/altreconomia11febr2026.pdf"),
+    ("Labex ITTEM", "09.02.2026 / Art and science: a learned jumble", "/assets/docs/art-and-science_-a-learned-jumble-e28093-labex-ittem-eng.pdf"),
+    ("Labex ITTEM", "27.01.2026 / Unseen &ndash; Balade sonore &agrave; la fronti&egrave;re", "/assets/docs/unseen-e28093-balade-sonore-a-la-frontiere-e28093-labex-ittem-1.pdf"),
+    ("Carnets de g&eacute;ographes 19", "2025 / Cristina Del Biaggio", "/assets/docs/cdg-11060.pdf"),
+    ("Pacte &ndash; Laboratoire de sciences sociales", "22.05.2025 / Pushing Border Art&rsquo;s Borders &ndash; session #3", "/assets/docs/pushing-border-arts-borders-session-3-_-pacte-laboratoire-de-sciences-sociales.pdf"),
+]
+
+# ============================================================
+#  TRANSLATIONS
+# ============================================================
+TR = {
+"en": {
+ "name": "English",
+ "nav": {"about":"About","works":"Works","sonic":"Sonic WalkScape","resonavisse":"Resonavisse","press":"Press","collaborations":"Collaborations","contacts":"Contacts"},
+ "meta_home": "BANDITE is an art-activism collective founded in 2023 by Valentina Bosio and Simona Sala, working at the border between Italy and France through sonic walkscapes, performance and memory.",
+ "foot_loc": "Turin &mdash; Val di Susa",
+ "foot_works": "Works", "foot_app": "Sonic WalkScape app", "foot_contacts": "Contacts",
+ "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala. Photos by Mauro Ujetto.",
+ "cta_works": "Explore the works", "cta_app": "Sonic WalkScape app",
+ "news_h": "News", "back_about": "&#8249; Back to About",
+ "home_intro": "BANDITE is a collective founded in 2023 by Valentina Bosio and Simona Sala, two artists whose research and creative practices meet at the intersection of art and activism. Their work is rooted in an anthropological approach to physical theatre and moves fluidly across theatre, dance, visual arts, video, and multimedia technologies. Their urgency lies in observing and narrating what remains at the margins: stories and identities rendered invisible or forgotten by dominant narratives.",
+ "news": [
+   {"date":"Mar&ndash;Jun 2026","title":"Esistenze Plurali &mdash; intersezioni di cartografie sensibili","text":"A participatory, performative workshop project conceived and curated by BANDITE within Torino Multisemiotica (University of Turin). Addressed to young people aged 18&ndash;25 with migratory backgrounds, it turns multilingualism and cultural difference into generative resources, culminating in a living, multimedia archive."},
+   {"date":"13 Nov 2025","title":"Resonavisse&rsquo;s first event: let&rsquo;s party together","text":"To celebrate the birth of RESONAVISSE, an evening at Ramo d&rsquo;Oro (Galleria Umberto I, Turin) between exhibition, immersive installation, electroacoustic live performance and DJ set &mdash; terracotta works by Massimiliano Todisco, <em>Al&egrave;theia || traces</em> by Simona Sala, live music by Mildred and Ansss. Opening 6:30 PM, live 7:30 PM."},
+   {"date":"New &middot; 2025","title":"Resonavisse &mdash; our new cultural association","text":"RESONAVISSE &mdash; from the Latin <em>resonare</em>, &ldquo;to resonate&rdquo; &mdash; is now officially active: a cultural and artistic association conceived as a living space for exploration, creation and sharing, where artistic practices, human experiences and different forms of knowledge meet."},
+   {"date":"Work in progress","title":"Unseen#1 &mdash; Montgen&egrave;vre &ndash; La Vachette (France)","text":"A new site-specific artwork on the story of Blessing Matthew, co-produced with Universit&eacute; Grenoble Alpes for the DisFrontAlp research by geographer Cristina Del Biaggio, made possible by &ldquo;Soutien aux projets de recherche en cr&eacute;ation 2025&rdquo; from SFR Cr&eacute;ation."},
+ ],
+ "about_kicker":"The collective", "about_title":"About",
+ "about": [
+   "BANDITE is a collective founded in 2023 by Valentina Bosio and Simona Sala, two artists whose research and creative practices meet at the intersection of art and activism. Their work is rooted in an anthropological approach to physical theatre and moves fluidly across theatre, dance, visual arts, video, and multimedia technologies. Their aim is to move beyond traditional performative languages by interweaving diverse expressive codes, restoring theatre to its nature as a collective space&mdash;a place for reflection and confrontation with the complexities of the present. Their urgency lies in observing and narrating what remains at the margins: stories and identities rendered invisible or forgotten by dominant narratives.",
+   "BANDITE&rsquo;s practice is grounded in an understanding of art as a practice of crossing&mdash;capable of connecting territories, languages, and communities. The collective continuously seeks to build spaces of dialogue between bodies and memories, between the real and the digital, between the present and the ancestral. The objective is not to represent, but to activate: to generate experiences in which the audience becomes part of a collective ritual of listening, awareness, and transmission. Their methodology draws on <em>Witness Action</em>, an interactive and participatory approach to performance developed from 2015 by Simona Sala in collaboration with the director of the Grotowski Institute (PL). This approach moves beyond aesthetics to activate collective witnessing processes, fostering mutual dignity and social engagement through art.",
+   "In 2024, BANDITE created <em>Presenti Mai Assenti</em> (&ldquo;Present, Never Absent&rdquo;), a site-specific immersive soundwalk conceived for CommemorAction&mdash;a day of resistance against the deadly regime of borders. The piece unfolds along the migratory route between Claviere (Italy) and Montgen&egrave;vre (France). Participants walk while listening via headphones to an original sound composition blending field recordings, Mediterranean and Chiapas chants, and the poetry of Rahma Nur, layered with the sound of their footsteps and the surrounding landscape. That same year, BANDITE also curated the exhibition <em>Orizzonti Verticali</em>, hosted in the Torre Delfinale in Oulx, a symbolic waypoint on the migratory route to France.",
+   "Continuing this trajectory, BANDITE has developed a new site-specific project, <em>Unseen</em> (2026), set between Montgen&egrave;vre and La Vachette near Brian&ccedil;on (France). Thanks also to the contribution of SFR Cr&eacute;ation, a program run by the University of Grenoble Alpes, they have designed and developed a customized app called Sonic WalkScape, which makes all the immersive walks BANDITE has produced easily accessible to participants. <em>Unseen</em> invites audiences to engage with the story of Blessing Matthew, a young woman who died at this border in May 2018.",
+ ],
+ "valentina_kicker":"Bandite", "valentina_title":"Valentina Bosio",
+ "valentina": [
+   "Valentina Bosio is a performer, artivist and community activator. Her authorial research focuses particularly on themes such as body-scape, borders, archive and memory, moving freely between the re-mediation and proposition of a language that intersects codes of theatre, dance and new media.",
+   "Her multidisciplinary background began with a two-year intensive program in physical theatre at Philip Radice&rsquo;s Atelier Teatro Fisico in Turin. In 2020 she obtained an Executive Master&rsquo;s degree with a final project on the valorisation of the landscape and cultural heritage of Alpine cross-border territories through Social and Community Theatre. She graduated from the University of Turin in DAMS with a research thesis on dance and educational innovation (2023). In 2021 she founded the trans-media collective Volpi Metropolitane. In 2023 she began collaborating with Simona Sala, with whom she founded the collective BANDITE.",
+   "She currently works on the Alpine border between Italy and France with Simona Sala. Their latest projects explore memory, witnessing and cross-border migratory movements, culminating in site-specific works, in collaboration with the community and with partners including Ponte tra Culture, the Grotowski Institute in Wroc&lstrok;aw, Universit&eacute; Grenoble Alpes and the Pacte social science laboratory in Grenoble.",
+ ],
+ "simona_kicker":"Bandite", "simona_title":"Simona Sala",
+ "simona": [
+   "Simona Sala is a visual artist, actress and performer.",
+   "In 2006 she founded the performing arts company Sineglossa. Since 2011 she has worked at the Grotowski Institute in Wroclaw (PL) within Teatr Zar. Between 2015 and 2018 she carried out field research on Candombl&eacute; rituals in Salvador de Bahia and on possession rituals in southern Iran. In those years she co-created, with Jaros&lstrok;aw Fret, <em>Witness Action</em>, a new interactive and participatory approach to performance aimed at activating personal identity and dignity rather than mere aesthetic experience. In 2022 she travelled to Chiapas, Mexico, following a political and social engagement within Zapatista communities.",
+   "Since 2023 she has been collaborating with the association On Borders, an ethnographic research laboratory on border crossings, on a field project between Italy and France.",
+ ],
+ "simona_link":"www.simonasala.com",
+ "works_kicker":"Projects", "works_title":"Works",
+ "works_sub":"Site-specific sonic walkscapes, exhibitions and immersive installations along the Italian&ndash;French Alpine border.",
+ "work_unseen_meta":"Montgen&egrave;vre &middot; 2026", "work_ov_meta":"Oulx &middot; 2024", "work_pma_meta":"Claviere &middot; 2024",
+ # UNSEEN
+ "unseen_tag":"Montgen&egrave;vre &mdash; La Vachette (FR) &middot; 2026",
+ "unseen_h2":"Sonic WalkScape at the border",
+ "unseen": [
+   "<strong>UNSEEN</strong> was created to remember Blessing Matthew and all those who have lost their lives crossing borders. This sonic walkscape is dedicated to them&mdash;an immersive walk that seeks to restore voice to stories forced into invisibility.",
+   "This Sonic WalkScape follows the paths between Montgen&egrave;vre and La Vachette through a journey of listening and participation, as an act of collective memory. An immersive sonic narrative composed of voices, sounds, and landscapes, it is presented on the occasion of Commemor-Action 2026, the international day of struggle against the regime of death and violence at borders. The score is made up of testimonies from activists and volunteers, field recordings, sounds and original music, together with data on the case of Blessing Matthew gathered by geographer Cristina Del Biaggio&mdash;who took part in the counter-investigation alongside Border Forensics and the association Toutes et Tous Migrants.",
+   "Sonic WalkScape is a format conceived by BANDITE that brings together artistic and sonic practice, fieldwork, and the active involvement of local communities. Developed through a custom app, it takes shape as a site-specific and participatory work that weaves together territory, memory, and community through storytelling and walking. It functions as a mobile sound installation in which participants, equipped with smartphones and headphones, are guided along a route via a map with geolocated points, where original audio content activates&mdash;voices, testimonies, songs, field recordings and environmental sounds.",
+ ],
+ "unseen_cta":"Download the app &amp; how to walk",
+ # OV
+ "ov_kicker":"Exhibition / immersive installation", "ov_title":"Orizzonti Verticali",
+ "ov_sub":"Sulle tracce di memorie esuli &middot; Oulx (IT) &middot; 2024",
+ "ov": [
+   "<em>Orizzonti Verticali &ndash; sulle tracce di memorie esuli</em> is an exhibition conceived as an immersive installation, the result of the synergy of a local community in dialogue with the territory. The common vision aims to catch what often remains invisible, giving voice to the exiles of the past and present, men and women determined to project their stories &ndash; and desires &ndash; forward.",
+   "The idea is to shift the perspective on the world we know and rethink the journey: the one taken by thousands of people driven to escape a ruined world in an attempt to create other possible futures. The exhibition is evoked in a liminal place, setting our gaze on interstitial spaces as spaces that are, also, generative &mdash; to pierce our own horizons and take flight into new perspectives.",
+ ],
+ # PMA
+ "pma_kicker":"Sonic WalkScape", "pma_title":"Presenti Mai Assenti",
+ "pma_sub":"Claviere &mdash; Montgen&egrave;vre &middot; 2024",
+ "pma": [
+   "Site-specific sonic walkscape created in Claviere, the last Italian village on the border with France.",
+   "Using a simple smartphone app, participants follow geolocated points on a map along an easy stretch of a migration route travelled by thousands of illegalised people every year. The walk is an immersive experience, composed of sounds, field recordings, Mediterranean songs and poems by Rahma Nur, overlapping with the sound of one&rsquo;s footsteps and the surrounding landscape.",
+   "The intent of this soundwalk is to engage participants in an active process of witnessing and memorisation, ensuring that the stories and voices of people compelled to migrate in search of freedom remain ever present, never absent.",
+ ],
+ # SONIC
+ "sonic_kicker":"The app", "sonic_title":"Sonic WalkScape",
+ "sonic_sub":"Download BANDITE&rsquo;s <em>Sonic WalkScape</em> app",
+ "sonic_iphone":"Download for iPhone", "sonic_android":"Download for Android",
+ "sonic_need_h":"WHAT YOU NEED",
+ "sonic_need":"<strong>Headphones</strong> or <strong>earphones</strong> for your smartphone. A <strong>phone</strong> with a charged battery. <strong>Shoes and clothing</strong> suitable for a <strong>mountain</strong> itinerary: always check the <strong>weather</strong> before setting out, and the avalanche bulletin; in case of snow make sure you have high boots and, if needed, poles and snowshoes.",
+ "sonic_how_h":"HOW TO DO A SONIC WALKSCAPE",
+ "sonic_how":"&ndash; <strong>Download the Sonic WalkScape app</strong>: scan the QR code on the first sign at Montgen&egrave;vre, or tap the buttons above.<br>&ndash; Open the app, go to <strong>settings</strong> (top-right), choose your <strong>language</strong> and <strong>enable geolocation</strong>.<br>&ndash; Back on the home page, <strong>start exploring</strong>: select from the map the Sonic WalkScape you want, tapping UNSEEN or PRESENTI MAI ASSENTI.<br>&ndash; <strong>Start the tour</strong> &ndash; choose language and subtitles (recordings available in Italian, French and English) and <strong>download the tour</strong> (also for offline use).<br>&ndash; Allow the use of your location data (GPS): tap <strong>always allow</strong>.<br>&ndash; Reach the <strong>starting point</strong>: for Unseen, reach the <strong>Chalmettes</strong> car park, then walk on to the <em>Games in forest</em> adventure park, watching for the crossing over the ski slopes. Follow the route to the reach the points on the map, up to the village of La Vachette.",
+ "sonic_end":"At the end of the Sonic WalkScape the app shows the buses back to Montgen&egrave;vre (tickets on board, &euro;2.20). You can leave feedback on the app, follow us on our social channels, or subscribe to our newsletter.",
+ # RESONAVISSE
+ "reso_title":"Resonavisse",
+ "reso": [
+   "<strong>Resonavisse</strong> &ndash; from the Latin <em>resonare</em>, <em>to have resounded</em> &ndash; is a cultural and artistic association born from the desire to create a living space for exploration, creation, and sharing: a space for encounters and creative contamination between art, human experience, and multiple knowledges.",
+   "The association pursues cultural, artistic, and social aims, placing at its core the experimentation with artistic languages as a means to express one&rsquo;s presence in the world, to awaken critical awareness, and to foster consciousness and transformation. We believe in art as a relational practice and a tool to engage, awaken, and activate those who encounter it. We support both practical and theoretical research, and we nurture the meeting of bodies, stories, and visions through expressive forms ranging from performance to theatre, from sculpture to voice, from sound to audiovisual creations.",
+ ],
+ # STAMPA
+ "press_kicker":"Press", "press_title":"Press review",
+ "press_sub":"Articles, reviews and academic contributions on BANDITE&rsquo;s work.",
+ "press_open":"Open PDF &#8594;",
+ # CONTACTS
+ "contacts_kicker":"Get in touch", "contacts_title":"Contacts",
+ "contacts_meta":"Turin &mdash; Val di Susa, Italy",
+ "contacts_app":"Get the app",
+ # 404
+ "nf_kicker":"Error 404", "nf_title":"Page not found",
+ "nf_sub":"The page you are looking for does not exist or has moved.",
+ "nf_home":"Back home",
+},
+
+"it": {
+ "name": "Italiano",
+ "nav": {"about":"Chi siamo","works":"Opere","sonic":"Sonic WalkScape","resonavisse":"Resonavisse","press":"Stampa","collaborations":"Collaborazioni","contacts":"Contatti"},
+ "meta_home": "BANDITE è un collettivo di art-activism fondato nel 2023 da Valentina Bosio e Simona Sala, attivo sul confine tra Italia e Francia attraverso sonic walkscape, performance e memoria.",
+ "foot_loc": "Torino &mdash; Val di Susa",
+ "foot_works": "Opere", "foot_app": "App Sonic WalkScape", "foot_contacts": "Contatti",
+ "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala. Foto di Mauro Ujetto.",
+ "cta_works": "Scopri le opere", "cta_app": "App Sonic WalkScape",
+ "news_h": "Novit&agrave;", "back_about": "&#8249; Torna a Chi siamo",
+ "home_intro": "BANDITE è un collettivo fondato nel 2023 da Valentina Bosio e Simona Sala, due artiste la cui ricerca e pratica creativa si incontrano all&rsquo;intersezione tra arte e attivismo. Il loro lavoro affonda le radici in un approccio antropologico al teatro fisico e si muove fluidamente tra teatro, danza, arti visive, video e tecnologie multimediali. La loro urgenza sta nell&rsquo;osservare e raccontare ciò che resta ai margini: storie e identità rese invisibili o dimenticate dalle narrazioni dominanti.",
+ "news": [
+   {"date":"Mar&ndash;Giu 2026","title":"Esistenze Plurali &mdash; intersezioni di cartografie sensibili","text":"Un progetto laboratoriale partecipativo e performativo ideato e curato dal collettivo BANDITE nell&rsquo;ambito di Torino Multisemiotica (Università di Torino). Rivolto a giovani tra i 18 e i 25 anni con background migratorio, trasforma multilinguismo e differenze culturali in risorse generative, culminando in un archivio vivente e multimediale."},
+   {"date":"13 nov 2025","title":"Il primo evento di Resonavisse: festeggiamo insieme","text":"Per celebrare la nascita di RESONAVISSE, una serata al Ramo d&rsquo;Oro (Galleria Umberto I, Torino) tra esposizione, installazione immersiva, live elettroacustico e DJ set &mdash; terrecotte di Massimiliano Todisco, <em>Al&egrave;theia || traces</em> di Simona Sala, musica live di Mildred e Ansss. Apertura 18:30, live 19:30."},
+   {"date":"Novit&agrave; &middot; 2025","title":"Resonavisse &mdash; la nostra nuova associazione culturale","text":"RESONAVISSE &mdash; dal latino <em>resonare</em>, &ldquo;essere risuonato&rdquo; &mdash; è ora ufficialmente attiva: un&rsquo;associazione culturale e artistica immaginata come spazio vivo di esplorazione, creazione e condivisione, dove pratiche artistiche, esperienze umane e saperi diversi si incontrano."},
+   {"date":"Work in progress","title":"Unseen#1 &mdash; Montgen&egrave;vre &ndash; La Vachette (Francia)","text":"Una nuova opera site-specific sulla storia di Blessing Matthew, coproduzione dell&rsquo;Universit&eacute; Grenoble Alpes per la ricerca DisFrontAlp della geografa Cristina Del Biaggio, resa possibile dal contributo &ldquo;Soutien aux projets de recherche en cr&eacute;ation 2025&rdquo; di SFR Cr&eacute;ation."},
+ ],
+ "about_kicker":"Il collettivo", "about_title":"Chi siamo",
+ "about": [
+   "BANDITE è un collettivo fondato nel 2023 da Valentina Bosio e Simona Sala, due artiste la cui ricerca e pratica creativa si incontrano all&rsquo;intersezione tra arte e attivismo. Il loro lavoro affonda le radici in un approccio antropologico al teatro fisico e si muove tra teatro, danza, arti visive, video e tecnologie multimediali. L&rsquo;obiettivo è superare i linguaggi performativi tradizionali intrecciando codici espressivi diversi, restituendo al teatro la sua natura di spazio collettivo&mdash;luogo di riflessione e confronto con le complessità del presente. La loro urgenza sta nell&rsquo;osservare e raccontare ciò che resta ai margini: storie e identità rese invisibili o dimenticate dalle narrazioni dominanti.",
+   "La pratica di BANDITE si fonda su una concezione dell&rsquo;arte come pratica di attraversamento&mdash;capace di connettere territori, lingue e comunità. Il collettivo cerca continuamente di costruire spazi di dialogo tra corpi e memorie, tra reale e digitale, tra presente e ancestrale. L&rsquo;obiettivo non è rappresentare, ma attivare: generare esperienze in cui il pubblico diventa parte di un rito collettivo di ascolto, consapevolezza e trasmissione. La metodologia attinge a <em>Witness Action</em>, un approccio interattivo e partecipativo alla performance sviluppato dal 2015 da Simona Sala in collaborazione con il direttore dell&rsquo;Istituto Grotowski (PL).",
+   "Nel 2024 BANDITE ha creato <em>Presenti Mai Assenti</em>, un&rsquo;immersiva passeggiata sonora site-specific concepita per la CommemorAction&mdash;una giornata di resistenza contro il regime mortale delle frontiere. L&rsquo;opera si sviluppa lungo la rotta migratoria tra Claviere (Italia) e Montgen&egrave;vre (Francia). Lo stesso anno il collettivo ha curato la mostra <em>Orizzonti Verticali</em>, ospitata nella Torre Delfinale di Oulx, tappa simbolica sulla rotta migratoria verso la Francia.",
+   "Proseguendo questa traiettoria, BANDITE ha sviluppato un nuovo progetto site-specific, <em>Unseen</em> (2026), tra Montgen&egrave;vre e La Vachette presso Brian&ccedil;on (Francia). Grazie anche al contributo di SFR Cr&eacute;ation, programma dell&rsquo;Università di Grenoble Alpes, il collettivo ha progettato e sviluppato un&rsquo;app personalizzata, Sonic WalkScape, che rende facilmente accessibili tutte le camminate immersive prodotte. <em>Unseen</em> invita il pubblico a confrontarsi con la storia di Blessing Matthew, giovane donna morta a questo confine nel maggio 2018.",
+ ],
+ "valentina_kicker":"Bandite", "valentina_title":"Valentina Bosio",
+ "valentina": [
+   "Valentina Bosio è performer, artivista e attivatrice di comunità. La sua ricerca autoriale si concentra in particolare su temi come body-scape, confini, archivio e memoria, muovendosi liberamente tra la ri-mediazione e la proposta di un linguaggio che interseca i codici del teatro, della danza e dei new media.",
+   "La sua formazione multidisciplinare inizia con un biennio intensivo di teatro fisico all&rsquo;Atelier Teatro Fisico di Philip Radice a Torino. Nel 2020 consegue un Master Executive con un progetto sulla valorizzazione del paesaggio e del patrimonio culturale dei territori transfrontalieri alpini attraverso il Teatro Sociale e di Comunità. Si laurea all&rsquo;Università di Torino in DAMS con una tesi su danza e innovazione educativa (2023). Nel 2021 fonda il collettivo trans-media Volpi Metropolitane. Nel 2023 inizia a collaborare con Simona Sala, con cui fonda il collettivo BANDITE.",
+   "Attualmente lavora sul confine alpino tra Italia e Francia insieme a Simona Sala. I loro ultimi progetti esplorano memoria, testimonianza e movimenti migratori transfrontalieri, culminando in opere site-specific, in collaborazione con la comunità e con realtà come Ponte tra Culture, l&rsquo;Istituto Grotowski di Wroc&lstrok;aw, l&rsquo;Universit&eacute; Grenoble Alpes e il laboratorio di scienze sociali Pacte di Grenoble.",
+ ],
+ "simona_kicker":"Bandite", "simona_title":"Simona Sala",
+ "simona": [
+   "Simona Sala è artista visiva, attrice e performer.",
+   "Nel 2006 fonda la compagnia di arti performative Sineglossa. Dal 2011 lavora all&rsquo;Istituto Grotowski di Wroclaw (PL) all&rsquo;interno del Teatr Zar. Tra il 2015 e il 2018 conduce viaggi di ricerca sul campo sui rituali del Candombl&eacute; a Salvador de Bahia e sui rituali di possessione nel sud dell&rsquo;Iran. In quegli anni co-crea, con Jaros&lstrok;aw Fret, <em>Witness Action</em>, un nuovo approccio interattivo e partecipativo alla performance volto ad attivare identità e dignità personale anziché la sola esperienza estetica. Nel 2022 viaggia in Chiapas, Messico, seguendo un&rsquo;istanza politica e sociale all&rsquo;interno delle comunità zapatiste.",
+   "Dal 2023 collabora con l&rsquo;associazione On Borders, laboratorio di ricerca etnografica sugli attraversamenti di frontiera, a un progetto sul campo tra Italia e Francia.",
+ ],
+ "simona_link":"www.simonasala.com",
+ "works_kicker":"Progetti", "works_title":"Opere",
+ "works_sub":"Sonic walkscape site-specific, mostre e installazioni immersive lungo il confine alpino tra Italia e Francia.",
+ "work_unseen_meta":"Montgen&egrave;vre &middot; 2026", "work_ov_meta":"Oulx &middot; 2024", "work_pma_meta":"Claviere &middot; 2024",
+ "unseen_tag":"Montgen&egrave;vre &mdash; La Vachette (FR) &middot; 2026",
+ "unseen_h2":"Sonic WalkScape alla frontiera",
+ "unseen": [
+   "<strong>UNSEEN</strong> nasce per ricordare Blessing Matthew e tutte le persone che hanno perso la vita attraversando le frontiere. A loro è dedicata questa sonic walkscape, una camminata sonora che vuole restituire voce alle storie costrette all&rsquo;invisibilità.",
+   "Questa Sonic WalkScape attraversa i sentieri tra Montgen&egrave;vre e La Vachette in un viaggio d&rsquo;ascolto e partecipazione, in un atto di memoria collettiva. Un racconto sonoro immersivo fatto di voci, suoni e paesaggi, presentato in occasione della Commemor-Action 2026, la giornata internazionale di lotta contro il regime di morte e violenza delle frontiere. La partitura è composta da testimonianze di attivistě e volontariě, field recordings, suoni e musiche originali, uniti ai dati sul caso di Blessing Matthew raccolti dalla geografa Cristina Del Biaggio&mdash;che ha partecipato alla contro-inchiesta insieme a Border Forensics e a Toutes et Tous Migrants.",
+   "Sonic WalkScape è un format ideato da BANDITE che unisce pratica artistica e sonora, lavoro sul campo e coinvolgimento attivo delle comunità locali. Sviluppata attraverso un&rsquo;app personalizzata, prende forma come opera site-specific e partecipativa che intreccia territorio, memoria e comunità attraverso il racconto e il camminare. Funziona come un&rsquo;installazione sonora mobile in cui i partecipanti, dotati di smartphone e cuffie, sono guidati lungo un percorso tramite una mappa con punti geolocalizzati, in cui si attivano contenuti audio originali&mdash;voci, testimonianze, canti, field recordings e suoni ambientali.",
+ ],
+ "unseen_cta":"Scarica l&rsquo;app e come camminare",
+ "ov_kicker":"Mostra / installazione immersiva", "ov_title":"Orizzonti Verticali",
+ "ov_sub":"Sulle tracce di memorie esuli &middot; Oulx (IT) &middot; 2024",
+ "ov": [
+   "<em>Orizzonti Verticali &ndash; sulle tracce di memorie esuli</em> è una mostra concepita come installazione immersiva, frutto della sinergia di una comunità locale in dialogo con il territorio. La visione comune punta a cogliere ciò che spesso resta invisibile, dando voce agli esuli del passato e del presente, uomini e donne determinati a proiettare in avanti le proprie storie &ndash; e i propri desideri.",
+   "L&rsquo;idea è spostare la prospettiva sul mondo che conosciamo e ripensare il viaggio: quello di migliaia di persone spinte a fuggire da un mondo in rovina nel tentativo di creare altri futuri possibili. La mostra è evocata in un luogo liminale, posando lo sguardo sugli spazi interstiziali come spazi anche generativi &mdash; per bucare i nostri orizzonti e spiccare il volo verso nuove prospettive.",
+ ],
+ "pma_kicker":"Sonic WalkScape", "pma_title":"Presenti Mai Assenti",
+ "pma_sub":"Claviere &mdash; Montgen&egrave;vre &middot; 2024",
+ "pma": [
+   "Sonic walkscape site-specific creata a Claviere, l&rsquo;ultimo villaggio italiano sul confine con la Francia.",
+   "Con una semplice app per smartphone, i partecipanti seguono punti geolocalizzati su una mappa lungo un tratto facile di una rotta migratoria percorsa ogni anno da migliaia di persone illegalizzate. La camminata è un&rsquo;esperienza immersiva, fatta di suoni, field recordings, canti mediterranei e poesie di Rahma Nur, che si sovrappongono al suono dei propri passi e al paesaggio circostante.",
+   "L&rsquo;intento di questa passeggiata sonora è coinvolgere i partecipanti in un processo attivo di testimonianza e memorizzazione, affinché le storie e le voci di chi è costretto a migrare in cerca di libertà restino sempre presenti, mai assenti.",
+ ],
+ "sonic_kicker":"L&rsquo;app", "sonic_title":"Sonic WalkScape",
+ "sonic_sub":"Scarica l&rsquo;app <em>Sonic WalkScape</em> di BANDITE",
+ "sonic_iphone":"Scarica per iPhone", "sonic_android":"Scarica per Android",
+ "sonic_need_h":"COSA TI SERVE?",
+ "sonic_need":"<strong>Cuffie</strong> o <strong>auricolari</strong> da collegare al tuo smartphone. <strong>Telefono</strong> con batteria carica. <strong>Scarpe e abiti</strong> adatti per un itinerario di <strong>montagna</strong>: controlla sempre il <strong>meteo</strong> prima di partire e il bollettino delle allerte valanghe; in caso di neve assicurati di avere scarpe alte ed eventualmente bacchette e ciaspole.",
+ "sonic_how_h":"COME FARE UNA SONIC WALKSCAPE?",
+ "sonic_how":"&ndash; <strong>Scarica l&rsquo;app Sonic WalkScape</strong>: scannerizza il QR code sul primo cartello a Monginevro o clicca sui pulsanti qui sopra.<br>&ndash; Entra nell&rsquo;app, vai nelle <strong>impostazioni</strong> (in alto a destra), seleziona la <strong>lingua</strong> e <strong>attiva la geolocalizzazione</strong>.<br>&ndash; Torna alla homepage e <strong>inizia ad esplorare</strong>: seleziona dalla mappa la Sonic WalkScape che vuoi fare, cliccando su UNSEEN o PRESENTI MAI ASSENTI.<br>&ndash; <strong>Inizia Tour</strong> &ndash; seleziona lingua e sottotitoli (registrazioni in italiano, francese e inglese) e fai il <strong>download del tour</strong> (anche offline).<br>&ndash; Consenti l&rsquo;uso dei dati di posizione (gps): clicca su <strong>consenti sempre</strong>.<br>&ndash; Raggiungi il <strong>punto di partenza</strong>: per Unseen arriva al parcheggio <strong>Chalmettes</strong>, poi cammina fino al parco avventure <em>Games in forest</em>, attento al passaggio che attraversa le piste da sci. Segui il percorso fino al villaggio di La Vachette.",
+ "sonic_end":"Al termine della Sonic WalkScape l&rsquo;app indica i bus per tornare a Monginevro (biglietto a bordo, 2,20&euro;). Puoi lasciare un feedback sull&rsquo;app, seguirci sui social o iscriverti alla newsletter.",
+ "reso_title":"Resonavisse",
+ "reso": [
+   "<strong>Resonavisse</strong> &ndash; dal latino <em>resonare</em>, <em>essere risuonato</em> &ndash; è un&rsquo;associazione culturale e artistica nata con l&rsquo;intento di creare uno spazio vivo di esplorazione, creazione e condivisione: un luogo di incontro e contaminazione creativa tra arte, esperienza umana e saperi molteplici.",
+   "L&rsquo;associazione persegue finalità culturali, artistiche e sociali, mettendo al centro la sperimentazione dei linguaggi dell&rsquo;arte come veicolo per esprimere la propria presenza nel mondo, attivare lo sguardo critico e generare consapevolezza e trasformazione. Crediamo nell&rsquo;arte come pratica relazionale e strumento per sensibilizzare e attivare chi la incontra. Promuoviamo la ricerca pratica e teorica e coltiviamo l&rsquo;incontro tra corpi, storie e visioni attraverso forme espressive che spaziano dalla performance al teatro, dalla scultura alla voce, dal suono alle creazioni audiovisive.",
+ ],
+ "press_kicker":"Stampa", "press_title":"Rassegna stampa",
+ "press_sub":"Articoli, recensioni e contributi accademici sul lavoro di BANDITE.",
+ "press_open":"Apri PDF &#8594;",
+ "contacts_kicker":"Scrivici", "contacts_title":"Contatti",
+ "contacts_meta":"Torino &mdash; Val di Susa, Italia",
+ "contacts_app":"Scarica l&rsquo;app",
+ "nf_kicker":"Errore 404", "nf_title":"Pagina non trovata",
+ "nf_sub":"La pagina che cerchi non esiste o è stata spostata.",
+ "nf_home":"Torna alla home",
+},
+
+"fr": {
+ "name": "Français",
+ "nav": {"about":"À propos","works":"Œuvres","sonic":"Sonic WalkScape","resonavisse":"Resonavisse","press":"Presse","collaborations":"Collaborations","contacts":"Contacts"},
+ "meta_home": "BANDITE est un collectif d&rsquo;art-activisme fondé en 2023 par Valentina Bosio et Simona Sala, actif à la frontière entre l&rsquo;Italie et la France à travers des sonic walkscapes, la performance et la mémoire.",
+ "foot_loc": "Turin &mdash; Vallée de Suse",
+ "foot_works": "Œuvres", "foot_app": "Appli Sonic WalkScape", "foot_contacts": "Contacts",
+ "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala. Photos de Mauro Ujetto.",
+ "cta_works": "Découvrir les œuvres", "cta_app": "Appli Sonic WalkScape",
+ "news_h": "Actualités", "back_about": "&#8249; Retour à À propos",
+ "home_intro": "BANDITE est un collectif fondé en 2023 par Valentina Bosio et Simona Sala, deux artistes dont la recherche et la pratique créative se rejoignent à l&rsquo;intersection de l&rsquo;art et de l&rsquo;activisme. Leur travail s&rsquo;enracine dans une approche anthropologique du théâtre physique et circule librement entre théâtre, danse, arts visuels, vidéo et technologies multimédia. Leur urgence : observer et raconter ce qui demeure aux marges, ces histoires et identités rendues invisibles ou oubliées par les récits dominants.",
+ "news": [
+   {"date":"Mars&ndash;Juin 2026","title":"Esistenze Plurali &mdash; intersezioni di cartografie sensibili","text":"Un projet d&rsquo;atelier participatif et performatif conçu et organisé par le collectif BANDITE dans le cadre de Torino Multisemiotica (Université de Turin). Destiné aux jeunes de 18 à 25 ans issus de parcours migratoires, il transforme le plurilinguisme et la différence culturelle en ressources génératives, aboutissant à une archive vivante et multimédia."},
+   {"date":"13 nov. 2025","title":"Le premier événement de Resonavisse : fêtons ensemble","text":"Pour célébrer la naissance de RESONAVISSE, une soirée au Ramo d&rsquo;Oro (Galleria Umberto I, Turin) entre exposition, installation immersive, performance live électroacoustique et DJ set &mdash; terres cuites de Massimiliano Todisco, <em>Al&egrave;theia || traces</em> de Simona Sala, musique live de Mildred et Ansss. Ouverture 18h30, live 19h30."},
+   {"date":"Nouveau &middot; 2025","title":"Resonavisse &mdash; notre nouvelle association culturelle","text":"RESONAVISSE &mdash; du latin <em>resonare</em>, &laquo;&nbsp;avoir résonné&nbsp;&raquo; &mdash; est désormais officiellement active : une association culturelle et artistique conçue comme un espace vivant d&rsquo;exploration, de création et de partage, où se rencontrent pratiques artistiques, expériences humaines et savoirs multiples."},
+   {"date":"En cours","title":"Unseen#1 &mdash; Montgen&egrave;vre &ndash; La Vachette (France)","text":"Une nouvelle œuvre in situ sur l&rsquo;histoire de Blessing Matthew, coproduite par l&rsquo;Université Grenoble Alpes pour la recherche DisFrontAlp de la géographe Cristina Del Biaggio, rendue possible par le &laquo;&nbsp;Soutien aux projets de recherche en création 2025&nbsp;&raquo; de la SFR Création."},
+ ],
+ "about_kicker":"Le collectif", "about_title":"À propos",
+ "about": [
+   "BANDITE est un collectif fondé en 2023 par Valentina Bosio et Simona Sala, deux artistes dont la recherche et la pratique créative se rejoignent à l&rsquo;intersection de l&rsquo;art et de l&rsquo;activisme. Leur travail s&rsquo;enracine dans une approche anthropologique du théâtre physique et circule entre théâtre, danse, arts visuels, vidéo et technologies multimédia. L&rsquo;objectif est de dépasser les langages performatifs traditionnels en entrelaçant des codes expressifs divers, rendant au théâtre sa nature d&rsquo;espace collectif&mdash;lieu de réflexion et de confrontation avec les complexités du présent. Leur urgence : observer et raconter ce qui reste aux marges, ces histoires et identités rendues invisibles par les récits dominants.",
+   "La pratique de BANDITE repose sur une conception de l&rsquo;art comme pratique de la traversée&mdash;capable de relier territoires, langues et communautés. Le collectif cherche sans cesse à construire des espaces de dialogue entre corps et mémoires, entre le réel et le numérique, entre le présent et l&rsquo;ancestral. L&rsquo;objectif n&rsquo;est pas de représenter, mais d&rsquo;activer : générer des expériences où le public devient partie d&rsquo;un rituel collectif d&rsquo;écoute, de conscience et de transmission. La méthodologie puise dans <em>Witness Action</em>, une approche interactive et participative de la performance développée dès 2015 par Simona Sala avec le directeur de l&rsquo;Institut Grotowski (PL).",
+   "En 2024, BANDITE a créé <em>Presenti Mai Assenti</em>, une marche sonore immersive in situ conçue pour la CommemorAction&mdash;une journée de résistance contre le régime mortel des frontières. L&rsquo;œuvre se déploie le long de la route migratoire entre Claviere (Italie) et Montgen&egrave;vre (France). La même année, le collectif a organisé l&rsquo;exposition <em>Orizzonti Verticali</em>, accueillie dans la Torre Delfinale d&rsquo;Oulx, étape symbolique sur la route migratoire vers la France.",
+   "Dans cette continuité, BANDITE a développé un nouveau projet in situ, <em>Unseen</em> (2026), entre Montgen&egrave;vre et La Vachette près de Brian&ccedil;on (France). Grâce aussi au soutien de la SFR Création, programme de l&rsquo;Université Grenoble Alpes, le collectif a conçu et développé une application dédiée, Sonic WalkScape, qui rend accessibles toutes les marches immersives produites. <em>Unseen</em> invite le public à se confronter à l&rsquo;histoire de Blessing Matthew, jeune femme morte à cette frontière en mai 2018.",
+ ],
+ "valentina_kicker":"Bandite", "valentina_title":"Valentina Bosio",
+ "valentina": [
+   "Valentina Bosio est performeuse, artiviste et activatrice de communauté. Sa recherche d&rsquo;auteure porte en particulier sur des thèmes tels que le body-scape, les frontières, l&rsquo;archive et la mémoire, se mouvant librement entre la re-médiation et la proposition d&rsquo;un langage qui croise les codes du théâtre, de la danse et des nouveaux médias.",
+   "Sa formation pluridisciplinaire débute par un cursus intensif de deux ans en théâtre physique à l&rsquo;Atelier Teatro Fisico de Philip Radice à Turin. En 2020, elle obtient un Master Executive avec un projet sur la valorisation du paysage et du patrimoine culturel des territoires transfrontaliers alpins par le Théâtre Social et de Communauté. Elle est diplômée de l&rsquo;Université de Turin en DAMS avec une thèse sur la danse et l&rsquo;innovation éducative (2023). En 2021, elle fonde le collectif trans-média Volpi Metropolitane. En 2023, elle commence à collaborer avec Simona Sala, avec qui elle fonde le collectif BANDITE.",
+   "Elle travaille actuellement sur la frontière alpine entre l&rsquo;Italie et la France avec Simona Sala. Leurs derniers projets explorent la mémoire, le témoignage et les mouvements migratoires transfrontaliers, aboutissant à des œuvres in situ, en collaboration avec la communauté et des partenaires tels que Ponte tra Culture, l&rsquo;Institut Grotowski de Wroc&lstrok;aw, l&rsquo;Université Grenoble Alpes et le laboratoire de sciences sociales Pacte de Grenoble.",
+ ],
+ "simona_kicker":"Bandite", "simona_title":"Simona Sala",
+ "simona": [
+   "Simona Sala est artiste visuelle, actrice et performeuse.",
+   "En 2006, elle fonde la compagnie d&rsquo;arts vivants Sineglossa. Depuis 2011, elle travaille à l&rsquo;Institut Grotowski de Wroclaw (PL) au sein du Teatr Zar. Entre 2015 et 2018, elle mène des recherches de terrain sur les rituels du Candomblé à Salvador de Bahia et sur les rituels de possession dans le sud de l&rsquo;Iran. Durant ces années, elle co-crée, avec Jaros&lstrok;aw Fret, <em>Witness Action</em>, une nouvelle approche interactive et participative de la performance visant à activer l&rsquo;identité et la dignité personnelles plutôt que la seule expérience esthétique. En 2022, elle se rend au Chiapas, au Mexique, suivant un engagement politique et social au sein des communautés zapatistes.",
+   "Depuis 2023, elle collabore avec l&rsquo;association On Borders, laboratoire de recherche ethnographique sur les passages de frontière, pour un projet de terrain entre l&rsquo;Italie et la France.",
+ ],
+ "simona_link":"www.simonasala.com",
+ "works_kicker":"Projets", "works_title":"Œuvres",
+ "works_sub":"Sonic walkscapes in situ, expositions et installations immersives le long de la frontière alpine italo-française.",
+ "work_unseen_meta":"Montgen&egrave;vre &middot; 2026", "work_ov_meta":"Oulx &middot; 2024", "work_pma_meta":"Claviere &middot; 2024",
+ "unseen_tag":"Montgen&egrave;vre &mdash; La Vachette (FR) &middot; 2026",
+ "unseen_h2":"Sonic WalkScape à la frontière",
+ "unseen": [
+   "<strong>UNSEEN</strong> est née pour se souvenir de Blessing Matthew et de toutes les personnes ayant perdu la vie en traversant les frontières. Cette sonic walkscape leur est dédiée&mdash;une marche sonore qui cherche à redonner voix aux histoires contraintes à l&rsquo;invisibilité.",
+   "Cette Sonic WalkScape parcourt les sentiers entre Montgen&egrave;vre et La Vachette dans un voyage d&rsquo;écoute et de participation, comme un acte de mémoire collective. Un récit sonore immersif fait de voix, de sons et de paysages, présenté à l&rsquo;occasion de la Commemor-Action 2026, journée internationale de lutte contre le régime de mort et de violence aux frontières. La partition se compose de témoignages de militant·es et de bénévoles, de field recordings, de sons et de musiques originales, avec les données sur le cas de Blessing Matthew recueillies par la géographe Cristina Del Biaggio&mdash;qui a participé à la contre-enquête aux côtés de Border Forensics et de l&rsquo;association Toutes et Tous Migrants.",
+   "Sonic WalkScape est un format conçu par BANDITE qui réunit pratique artistique et sonore, travail de terrain et implication active des communautés locales. Développée via une application dédiée, elle prend la forme d&rsquo;une œuvre in situ et participative qui tisse ensemble territoire, mémoire et communauté par le récit et la marche. Elle fonctionne comme une installation sonore mobile où les participant·es, muni·es d&rsquo;un smartphone et d&rsquo;écouteurs, sont guidé·es le long d&rsquo;un parcours via une carte à points géolocalisés, où s&rsquo;activent des contenus audio originaux&mdash;voix, témoignages, chants, field recordings et sons d&rsquo;ambiance.",
+ ],
+ "unseen_cta":"Télécharger l&rsquo;appli &amp; comment marcher",
+ "ov_kicker":"Exposition / installation immersive", "ov_title":"Orizzonti Verticali",
+ "ov_sub":"Sulle tracce di memorie esuli &middot; Oulx (IT) &middot; 2024",
+ "ov": [
+   "<em>Orizzonti Verticali &ndash; sulle tracce di memorie esuli</em> est une exposition conçue comme une installation immersive, fruit de la synergie d&rsquo;une communauté locale en dialogue avec le territoire. La vision commune cherche à saisir ce qui demeure souvent invisible, en donnant voix aux exilés du passé et du présent, hommes et femmes déterminés à projeter en avant leurs histoires &ndash; et leurs désirs.",
+   "L&rsquo;idée est de déplacer le regard sur le monde que nous connaissons et de repenser le voyage : celui de milliers de personnes poussées à fuir un monde en ruine pour tenter de créer d&rsquo;autres futurs possibles. L&rsquo;exposition est évoquée dans un lieu liminal, posant le regard sur les espaces interstitiels comme des espaces aussi génératifs &mdash; pour percer nos propres horizons et nous élancer vers de nouvelles perspectives.",
+ ],
+ "pma_kicker":"Sonic WalkScape", "pma_title":"Presenti Mai Assenti",
+ "pma_sub":"Claviere &mdash; Montgen&egrave;vre &middot; 2024",
+ "pma": [
+   "Sonic walkscape in situ créée à Claviere, le dernier village italien à la frontière avec la France.",
+   "Avec une simple application pour smartphone, les participant·es suivent des points géolocalisés sur une carte le long d&rsquo;un tronçon facile d&rsquo;une route migratoire empruntée chaque année par des milliers de personnes illégalisées. La marche est une expérience immersive, faite de sons, de field recordings, de chants méditerranéens et de poèmes de Rahma Nur, qui se superposent au bruit des pas et au paysage environnant.",
+   "L&rsquo;intention de cette marche sonore est d&rsquo;engager les participant·es dans un processus actif de témoignage et de mémorisation, afin que les histoires et les voix de celles et ceux contraints de migrer en quête de liberté restent toujours présentes, jamais absentes.",
+ ],
+ "sonic_kicker":"L&rsquo;application", "sonic_title":"Sonic WalkScape",
+ "sonic_sub":"Téléchargez l&rsquo;appli <em>Sonic WalkScape</em> de BANDITE",
+ "sonic_iphone":"Télécharger pour iPhone", "sonic_android":"Télécharger pour Android",
+ "sonic_need_h":"DE QUOI AVEZ-VOUS BESOIN ?",
+ "sonic_need":"Un <strong>casque</strong> ou des <strong>écouteurs</strong> à brancher sur votre smartphone. Un <strong>téléphone</strong> chargé. Des <strong>chaussures et vêtements</strong> adaptés à un itinéraire de <strong>montagne</strong> : vérifiez toujours la <strong>météo</strong> avant de partir et le bulletin d&rsquo;avalanches ; en cas de neige, prévoyez des chaussures montantes et, si besoin, bâtons et raquettes.",
+ "sonic_how_h":"COMMENT FAIRE UNE SONIC WALKSCAPE ?",
+ "sonic_how":"&ndash; <strong>Téléchargez l&rsquo;appli Sonic WalkScape</strong> : scannez le QR code du premier panneau à Montgen&egrave;vre, ou appuyez sur les boutons ci-dessus.<br>&ndash; Ouvrez l&rsquo;appli, allez dans les <strong>réglages</strong> (en haut à droite), choisissez la <strong>langue</strong> et <strong>activez la géolocalisation</strong>.<br>&ndash; De retour à l&rsquo;accueil, <strong>explorez</strong> : sélectionnez sur la carte la Sonic WalkScape souhaitée, en touchant UNSEEN ou PRESENTI MAI ASSENTI.<br>&ndash; <strong>Démarrez le tour</strong> &ndash; choisissez langue et sous-titres (enregistrements en italien, français et anglais) et <strong>téléchargez le tour</strong> (aussi hors ligne).<br>&ndash; Autorisez l&rsquo;utilisation de votre position (GPS) : appuyez sur <strong>toujours autoriser</strong>.<br>&ndash; Rejoignez le <strong>point de départ</strong> : pour Unseen, gagnez le parking des <strong>Chalmettes</strong>, puis marchez jusqu&rsquo;au parc aventure <em>Games in forest</em>, attentif au passage qui traverse les pistes de ski. Suivez le parcours jusqu&rsquo;au village de La Vachette.",
+ "sonic_end":"À la fin de la Sonic WalkScape, l&rsquo;appli indique les bus pour revenir à Montgen&egrave;vre (billet à bord, 2,20&euro;). Vous pouvez laisser un avis sur l&rsquo;appli, nous suivre sur nos réseaux ou vous abonner à la newsletter.",
+ "reso_title":"Resonavisse",
+ "reso": [
+   "<strong>Resonavisse</strong> &ndash; du latin <em>resonare</em>, <em>avoir résonné</em> &ndash; est une association culturelle et artistique née du désir de créer un espace vivant d&rsquo;exploration, de création et de partage : un lieu de rencontre et de contamination créative entre l&rsquo;art, l&rsquo;expérience humaine et les savoirs multiples.",
+   "L&rsquo;association poursuit des finalités culturelles, artistiques et sociales, en plaçant au cœur l&rsquo;expérimentation des langages de l&rsquo;art comme moyen d&rsquo;exprimer sa présence au monde, d&rsquo;éveiller le regard critique et de susciter conscience et transformation. Nous croyons en l&rsquo;art comme pratique relationnelle et outil pour sensibiliser et activer celles et ceux qui le rencontrent. Nous soutenons la recherche pratique et théorique et cultivons la rencontre entre corps, histoires et visions à travers des formes allant de la performance au théâtre, de la sculpture à la voix, du son aux créations audiovisuelles.",
+ ],
+ "press_kicker":"Presse", "press_title":"Revue de presse",
+ "press_sub":"Articles, comptes rendus et contributions académiques sur le travail de BANDITE.",
+ "press_open":"Ouvrir le PDF &#8594;",
+ "contacts_kicker":"Écrivez-nous", "contacts_title":"Contacts",
+ "contacts_meta":"Turin &mdash; Vallée de Suse, Italie",
+ "contacts_app":"Obtenir l&rsquo;appli",
+ "nf_kicker":"Erreur 404", "nf_title":"Page introuvable",
+ "nf_sub":"La page que vous cherchez n&rsquo;existe pas ou a été déplacée.",
+ "nf_home":"Retour à l&rsquo;accueil",
+},
+}
+
+# ============================================================
+#  HELPERS
+# ============================================================
+def url(lang, file):
+    prefix = "/" if lang == "en" else "/%s/" % lang
+    if file == "index.html":
+        return prefix
+    return prefix + file
+
+def outpath(lang, filename):
+    if lang == "en":
+        return os.path.join(ROOT, filename)
+    d = os.path.join(ROOT, lang)
+    os.makedirs(d, exist_ok=True)
+    return os.path.join(d, filename)
+
+def head(lang, filename, title, desc, og_image="/assets/img/hero-home.jpg"):
+    L = TR[lang]
+    nav = "\n".join(
+        '      <a href="{href}"{cur}>{label}</a>'.format(
+            href=url(lang, f), label=html.escape(L["nav"][k]),
+            cur=' aria-current="page"' if f == filename else "")
+        for f, k in NAV
+    )
+    switch = "\n".join(
+        '        <a href="{href}"{cur} hreflang="{lg}">{lab}</a>'.format(
+            href=url(lg, filename), lg=lg, lab=lg.upper(),
+            cur=' aria-current="page"' if lg == lang else "")
+        for lg in LANGS
+    )
+    alt = "\n".join(
+        '  <link rel="alternate" hreflang="{lg}" href="{u}">'.format(lg=lg, u=SITE_URL + url(lg, filename))
+        for lg in LANGS
+    ) + '\n  <link rel="alternate" hreflang="x-default" href="{u}">'.format(u=SITE_URL + url("en", filename))
+    return """<!doctype html>
+<html lang="{lang}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{title}</title>
+  <meta name="description" content="{desc}">
+  <link rel="canonical" href="{site}{canon}">
+{alt}
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{title}">
+  <meta property="og:description" content="{desc}">
+  <meta property="og:image" content="{site}{og}">
+  <meta property="og:url" content="{site}{canon}">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="/assets/img/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="preload" href="/assets/fonts/roboto-condensed.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/handelson-five.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap site-header__inner">
+      <a class="brand" href="{home}" aria-label="BANDITE — artivism"><img src="/assets/img/bandite-wordmark.svg" alt="BANDITE — artivism" width="118" height="66"></a>
+      <button class="nav-toggle" aria-label="Menu" aria-controls="nav" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav" id="nav">
+{nav}
+        <span class="lang-switch">
+{switch}
+        </span>
+      </nav>
+    </div>
+  </header>
+""".format(lang=lang, title=html.escape(title), desc=html.escape(desc),
+           site=SITE_URL, canon=url(lang, filename), og=og_image,
+           alt=alt, nav=nav, switch=switch, home=url(lang, "index.html"))
+
+def foot(lang):
+    L = TR[lang]
+    return """
+  <footer class="site-footer">
+    <div class="wrap site-footer__inner">
+      <div>
+        <img class="fbrand" src="/assets/img/bandite-wordmark.svg" alt="BANDITE — artivism" width="150" height="84">
+        <p style="margin:.8em 0 0">{loc}</p>
+      </div>
+      <div class="cols">
+        <div>
+          <a href="{c_contacts}">{contacts}</a><br>
+          <a href="mailto:resonavisse@gmail.com">resonavisse@gmail.com</a>
+        </div>
+        <div>
+          <a href="{c_works}">{works}</a><br>
+          <a href="{c_sonic}">{app}</a>
+        </div>
+      </div>
+    </div>
+    <div class="wrap" style="margin-top:28px;font-size:.8rem;opacity:.7">
+      © <span id="yr">2026</span> {credit}
+    </div>
+  </footer>
+  <script src="/assets/js/main.js"></script>
+  <script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
+</body>
+</html>
+""".format(loc=L["foot_loc"], contacts=L["foot_contacts"], works=L["foot_works"], app=L["foot_app"],
+           credit=L["foot_credit"],
+           c_contacts=url(lang, "contacts.html"), c_works=url(lang, "works.html"), c_sonic=url(lang, "sonic-walkscape.html"))
+
+def write(lang, filename, title, desc, body, og_image="/assets/img/hero-home.jpg"):
+    out = head(lang, filename, title, desc, og_image) + body + foot(lang)
+    with open(outpath(lang, filename), "w", encoding="utf-8") as f:
+        f.write(out)
+
+def slideshow(images, alt):
+    slides = "".join('<div class="slide"><img src="%s" alt="%s" loading="lazy"></div>' % (s, html.escape(alt)) for s in images)
+    return """<div class="gallery">
+  <div class="slides">
+    <div class="slides__track">%s</div>
+    <button class="slides__btn slides__btn--prev" aria-label="Previous">&#8249;</button>
+    <button class="slides__btn slides__btn--next" aria-label="Next">&#8250;</button>
   </div>
-  <section class="section--tight">
+  <div class="slides__dots"></div>
+</div>""" % slides
+
+def paras(items, cls="prose justify"):
+    return "\n".join("      <p>%s</p>" % p for p in items)
+
+# ============================================================
+#  PAGE BUILDERS  (per language)
+# ============================================================
+def build_all(lang):
+    L = TR[lang]
+    BR = "BANDITE"
+
+    # ---- HOME ----
+    news = "\n        ".join(
+        '<details class="news-item"><summary class="news-summary">'
+        '<time class="news-date">{d}</time><span class="news-title">{t}</span>'
+        '<span class="news-toggle" aria-hidden="true"></span></summary>'
+        '<div class="news-content"><p class="news-text">{x}</p></div></details>'.format(d=n["date"], t=n["title"], x=n["text"])
+        for n in L["news"]
+    )
+    home = """
+  <section class="hero hero--home" style="background-image:url('/assets/img/hero-home.jpg')">
+    <h1 class="sr-only">BANDITE &mdash; artivism</h1>
+  </section>
+
+  <section class="section">
+    <div class="wrap read prose justify">
+      <p>{intro}</p>
+      <div class="btn-row">
+        <a class="btn btn--accent" href="{works}">{cta_works}</a>
+        <a class="btn" href="{sonic}">{cta_app}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section news" id="news">
     <div class="wrap">
-      <div class="logos">
-__ITEMS__
+      <h2 class="news-heading">{news_h}</h2>
+      <div class="news-list">
+        {news}
       </div>
     </div>
   </section>
-""".replace("__ITEMS__", logo_items)
-page("collaborations.html", "Collaborations — BANDITE",
-     "The alliances and collaborations that support BANDITE's work.",
-     collab_body)
+""".format(intro=L["home_intro"], works=url(lang, "works.html"), sonic=url(lang, "sonic-walkscape.html"),
+           cta_works=L["cta_works"], cta_app=L["cta_app"], news_h=L["news_h"], news=news)
+    write(lang, "index.html", "BANDITE — artivism", L["meta_home"], home)
 
-# ============================================================
-# CONTACTS
-# ============================================================
-contacts_body = """
+    # ---- ABOUT ----
+    about = """
   <div class="wrap page-head read">
-    <div class="kicker">Get in touch</div>
-    <h1>Contacts</h1>
+    <div class="kicker">{kicker}</div>
+    <h1>{title}</h1>
+  </div>
+  <div class="wrap">
+    <figure class="emblem"><img src="/assets/img/bandite-emblem.webp" alt="BANDITE" width="440" height="440" loading="lazy"></figure>
   </div>
   <section class="section--tight">
-    <div class="wrap read">
-      <p class="contact-big"><a href="mailto:resonavisse@gmail.com">resonavisse@gmail.com</a></p>
-      <p class="contact-meta">Turin &mdash; Val di Susa, Italy</p>
-      <div class="btn-row" style="margin-top:2em">
-        <a class="btn" href="https://simonasala.com/" target="_blank" rel="noopener">simonasala.com</a>
-        <a class="btn" href="sonic-walkscape.html">Get the app</a>
+    <div class="wrap read prose justify">
+{p}
+      <div class="btn-row">
+        <a class="btn" href="{simona}">Simona Sala</a>
+        <a class="btn" href="{valentina}">Valentina Bosio</a>
       </div>
     </div>
   </section>
-"""
-page("contacts.html", "Contacts — BANDITE",
-     "Contact BANDITE — resonavisse@gmail.com — Turin, Val di Susa, Italy.",
-     contacts_body)
+""".format(kicker=L["about_kicker"], title=L["about_title"], p=paras(L["about"]),
+           simona=url(lang, "simona-sala.html"), valentina=url(lang, "valentina-bosio.html"))
+    write(lang, "about.html", "%s — BANDITE" % L["about_title"], L["meta_home"], about)
 
-# ============================================================
-# 404
-# ============================================================
-nf_body = """
-  <section class="section" style="text-align:center">
-    <div class="wrap read">
-      <div class="kicker" style="color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.78rem;font-weight:600">Error 404</div>
-      <h1>Page not found</h1>
-      <p class="sub" style="color:var(--muted)">The page you are looking for does not exist or has moved.</p>
-      <div class="btn-row" style="justify-content:center"><a class="btn btn--accent" href="index.html">Back home</a></div>
+    # ---- VALENTINA ----
+    val = """
+  <div class="wrap page-head read"><div class="kicker">{k}</div><h1>{t}</h1></div>
+  <section class="section--tight"><div class="wrap read prose justify">
+{p}
+    <div class="btn-row"><a class="btn" href="{about}">{back}</a></div>
+  </div></section>
+""".format(k=L["valentina_kicker"], t=L["valentina_title"], p=paras(L["valentina"]),
+           about=url(lang, "about.html"), back=L["back_about"])
+    write(lang, "valentina-bosio.html", "Valentina Bosio — BANDITE", L["valentina"][0][:150], val)
+
+    # ---- SIMONA ----
+    sim = """
+  <div class="wrap page-head read"><div class="kicker">{k}</div><h1>{t}</h1></div>
+  <section class="section--tight"><div class="wrap read prose justify">
+{p}
+    <p><a href="https://simonasala.com/" target="_blank" rel="noopener">{link}</a></p>
+    <div class="btn-row"><a class="btn" href="{about}">{back}</a></div>
+  </div></section>
+""".format(k=L["simona_kicker"], t=L["simona_title"], p=paras(L["simona"]), link=L["simona_link"],
+           about=url(lang, "about.html"), back=L["back_about"])
+    write(lang, "simona-sala.html", "Simona Sala — BANDITE", L["simona"][0][:150], sim)
+
+    # ---- WORKS ----
+    works = """
+  <div class="wrap page-head read">
+    <div class="kicker">{kicker}</div><h1>{title}</h1>
+    <p class="sub">{sub}</p>
+  </div>
+  <section class="section--tight"><div class="wrap read">
+    <div class="work-list">
+      <a class="work-item" href="{u_unseen}"><h3>Unseen</h3><span class="meta">{m_unseen}</span><span class="arrow">&#8594;</span></a>
+      <a class="work-item" href="{u_ov}"><h3>Orizzonti Verticali</h3><span class="meta">{m_ov}</span><span class="arrow">&#8594;</span></a>
+      <a class="work-item" href="{u_pma}"><h3>Presenti Mai Assenti</h3><span class="meta">{m_pma}</span><span class="arrow">&#8594;</span></a>
     </div>
-  </section>
-"""
-page("404.html", "Page not found — BANDITE", "Page not found.", nf_body, current="index.html")
+  </div></section>
+""".format(kicker=L["works_kicker"], title=L["works_title"], sub=L["works_sub"],
+           u_unseen=url(lang, "unseen.html"), u_ov=url(lang, "orizzonti-verticali.html"), u_pma=url(lang, "presenti-mai-assenti.html"),
+           m_unseen=L["work_unseen_meta"], m_ov=L["work_ov_meta"], m_pma=L["work_pma_meta"])
+    write(lang, "works.html", "%s — BANDITE" % L["works_title"], L["works_sub"], works)
 
-print("\nDone. Pages written to", OUT)
+    # ---- UNSEEN ----
+    unseen = """
+  <section class="hero hero--page" style="background-image:url('/assets/img/unseen-hero.jpg')">
+    <div class="wrap hero__inner"><h1 class="hero__title">Unseen</h1><p class="hero__tag">{tag}</p></div>
+  </section>
+  <section class="section--tight"><div class="wrap read prose justify">
+    <h2 style="text-align:left">{h2}</h2>
+{p}
+    <div class="btn-row"><a class="btn btn--accent" href="{sonic}">{cta}</a></div>
+  </div>
+  <div class="wrap read"><div class="figure"><img src="/assets/img/unseen-info.jpg" alt="UNSEEN" loading="lazy"></div></div>
+  </section>
+""".format(tag=L["unseen_tag"], h2=L["unseen_h2"], p=paras(L["unseen"]), sonic=url(lang, "sonic-walkscape.html"), cta=L["unseen_cta"])
+    write(lang, "unseen.html", "Unseen — BANDITE", L["unseen"][0][:150].replace("<strong>","").replace("</strong>",""), unseen, og_image="/assets/img/unseen-hero.jpg")
+
+    # ---- ORIZZONTI VERTICALI ----
+    ov = """
+  <div class="wrap page-head read"><div class="kicker">{k}</div><h1>{t}</h1><p class="sub">{sub}</p></div>
+  <section class="section--tight"><div class="wrap read prose justify">
+{p}
+  </div>
+  <div class="wrap">{slide}</div>
+  </section>
+""".format(k=L["ov_kicker"], t=L["ov_title"], sub=L["ov_sub"], p=paras(L["ov"]), slide=slideshow(OV_IMGS, "Orizzonti Verticali"))
+    write(lang, "orizzonti-verticali.html", "Orizzonti Verticali — BANDITE", L["ov_sub"], ov, og_image="/assets/img/ov-1.jpg")
+
+    # ---- PRESENTI MAI ASSENTI ----
+    pma = """
+  <div class="wrap page-head read"><div class="kicker">{k}</div><h1>{t}</h1><p class="sub">{sub}</p></div>
+  <section class="section--tight"><div class="wrap read prose justify">
+{p}
+  </div>
+  <div class="wrap">{slide}</div>
+  </section>
+""".format(k=L["pma_kicker"], t=L["pma_title"], sub=L["pma_sub"], p=paras(L["pma"]), slide=slideshow(PMA_IMGS, "Presenti Mai Assenti"))
+    write(lang, "presenti-mai-assenti.html", "Presenti Mai Assenti — BANDITE", L["pma_sub"], pma, og_image="/assets/img/pma-1.jpg")
+
+    # ---- SONIC WALKSCAPE ----
+    sonic = """
+  <div class="wrap page-head read"><div class="kicker">{k}</div><h1>{t}</h1><p class="sub">{sub}</p></div>
+  <section class="section--tight"><div class="wrap read">
+    <div class="btn-row">
+      <a class="btn btn--accent" href="https://apps.apple.com/it/app/sonicwalkscape/id6757606425?l=en-GB" target="_blank" rel="noopener">{iphone}</a>
+      <a class="btn btn--accent" href="https://play.google.com/store/apps/details?id=com.bandite.sonicwalkscape" target="_blank" rel="noopener">{android}</a>
+    </div>
+    <div class="figure"><img src="/assets/img/sonic-dossier.png" alt="Sonic WalkScape" loading="lazy"></div>
+    <div class="prose">
+      <h3 style="color:#b8860b">{need_h}</h3>
+      <p>{need}</p>
+      <h3 style="color:#b8860b">{how_h}</h3>
+      <p>{how}</p>
+      <p>{end}</p>
+    </div>
+  </div></section>
+""".format(k=L["sonic_kicker"], t=L["sonic_title"], sub=L["sonic_sub"], iphone=L["sonic_iphone"], android=L["sonic_android"],
+           need_h=L["sonic_need_h"], need=L["sonic_need"], how_h=L["sonic_how_h"], how=L["sonic_how"], end=L["sonic_end"])
+    write(lang, "sonic-walkscape.html", "Sonic WalkScape — BANDITE", L["meta_home"], sonic)
+
+    # ---- RESONAVISSE ----
+    reso = """
+  <section class="hero hero--page" style="background-image:url('/assets/img/resonavisse-hero.jpg')">
+    <div class="wrap hero__inner"><h1 class="hero__title">{t}</h1></div>
+  </section>
+  <section class="section--tight"><div class="wrap read prose justify">
+{p}
+  </div>
+  <div class="wrap read"><div class="figure figure--center"><img src="/assets/img/resonavisse-logo.png" alt="Resonavisse" loading="lazy"></div></div>
+  </section>
+""".format(t=L["reso_title"], p=paras(L["reso"]))
+    write(lang, "resonavisse.html", "Resonavisse — BANDITE", L["reso"][0][:150].replace("<strong>","").replace("</strong>","").replace("<em>","").replace("</em>",""), reso, og_image="/assets/img/resonavisse-hero.jpg")
+
+    # ---- STAMPA ----
+    press_items = "\n".join(
+        '        <a href="{h}" target="_blank" rel="noopener"><span><span class="src">{s}</span><br><span class="who">{w}</span></span><span class="dl">{open}</span></a>'.format(
+            h=h, s=s, w=w, open=L["press_open"]) for s, w, h in PRESS)
+    press = """
+  <div class="wrap page-head read"><div class="kicker">{k}</div><h1>{t}</h1><p class="sub">{sub}</p></div>
+  <section class="section--tight"><div class="wrap read"><div class="press">
+{items}
+  </div></div></section>
+""".format(k=L["press_kicker"], t=L["press_title"], sub=L["press_sub"], items=press_items)
+    write(lang, "stampa.html", "%s — BANDITE" % L["press_title"], L["press_sub"], press)
+
+    # ---- COLLABORATIONS ----
+    logo_items = "\n".join('        <figure><img src="/assets/img/%s" alt="%s" loading="lazy"></figure>' % (s, html.escape(a)) for s, a in LOGOS)
+    collab = """
+  <div class="wrap page-head read"><div class="kicker">{k}</div><h1>{t}</h1></div>
+  <section class="section--tight"><div class="wrap"><div class="logos">
+{items}
+  </div></div></section>
+""".format(k=("Network" if lang=="en" else ("Rete" if lang=="it" else "Réseau")), t=L["nav"]["collaborations"], items=logo_items)
+    write(lang, "collaborations.html", "%s — BANDITE" % L["nav"]["collaborations"], L["meta_home"], collab)
+
+    # ---- CONTACTS ----
+    contacts = """
+  <div class="wrap page-head read"><div class="kicker">{k}</div><h1>{t}</h1></div>
+  <section class="section--tight"><div class="wrap read">
+    <p class="contact-big"><a href="mailto:resonavisse@gmail.com">resonavisse@gmail.com</a></p>
+    <p class="contact-meta">{meta}</p>
+    <div class="btn-row" style="margin-top:2em">
+      <a class="btn" href="https://simonasala.com/" target="_blank" rel="noopener">simonasala.com</a>
+      <a class="btn" href="{sonic}">{app}</a>
+    </div>
+  </div></section>
+""".format(k=L["contacts_kicker"], t=L["contacts_title"], meta=L["contacts_meta"], sonic=url(lang, "sonic-walkscape.html"), app=L["contacts_app"])
+    write(lang, "contacts.html", "%s — BANDITE" % L["contacts_title"], L["contacts_meta"], contacts)
+
+    # ---- 404 ----
+    nf = """
+  <section class="section" style="text-align:center"><div class="wrap read">
+    <div class="kicker" style="color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-size:.78rem;font-weight:600">{k}</div>
+    <h1>{t}</h1>
+    <p class="sub" style="color:var(--muted)">{sub}</p>
+    <div class="btn-row" style="justify-content:center"><a class="btn btn--accent" href="{home}">{home_l}</a></div>
+  </div></section>
+""".format(k=L["nf_kicker"], t=L["nf_title"], sub=L["nf_sub"], home=url(lang, "index.html"), home_l=L["nf_home"])
+    write(lang, "404.html", "%s — BANDITE" % L["nf_title"], L["nf_sub"], nf)
+
+
+for lg in LANGS:
+    build_all(lg)
+    print("built:", lg)
+
+# sitemap (all languages)
+pages = ["index.html","about.html","works.html","sonic-walkscape.html","resonavisse.html",
+         "stampa.html","collaborations.html","contacts.html","unseen.html",
+         "orizzonti-verticali.html","presenti-mai-assenti.html","valentina-bosio.html","simona-sala.html"]
+urls = ""
+for lg in LANGS:
+    for p in pages:
+        urls += "  <url><loc>%s%s</loc></url>\n" % (SITE_URL, url(lg, p))
+with open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8") as f:
+    f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + '</urlset>\n')
+
+print("\nDone — EN at root, IT in /it/, FR in /fr/.")
