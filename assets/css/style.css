@@ -12,8 +12,15 @@
   font-display: swap;
 }
 @font-face {
-  font-family: "Sailors";
-  src: url("../fonts/sailors.woff2") format("woff2");
+  font-family: "Barlow Condensed";
+  src: url("../fonts/barlow-condensed-300.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  src: url("../fonts/barlow-condensed-400.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -21,7 +28,7 @@
 
 :root {
   --font-display: "Handelson Five", "Brush Script MT", cursive;
-  --font-head: "Sailors", "DM Sans", system-ui, sans-serif;
+  --font-head: "Barlow Condensed", "DM Sans", system-ui, sans-serif;
   --bg: #fafafa;
   --fg: #292724;
   --muted: #6b665f;
@@ -58,15 +65,15 @@ a:hover { color: var(--accent); }
 h1, h2, h3 { margin: 0 0 .6em; }
 h1 {
   font-family: var(--font-head);
-  font-weight: 400; line-height: 1.1; letter-spacing: .01em;
-  font-size: clamp(2.4rem, 5.5vw, 3.6rem);
+  font-weight: 300; line-height: 1.08; letter-spacing: .01em;
+  font-size: clamp(2.6rem, 6vw, 4rem);
 }
 h2, h3 {
   font-family: var(--font-head);
-  font-weight: 400; line-height: 1.1; letter-spacing: .02em;
+  font-weight: 300; line-height: 1.1; letter-spacing: .02em;
 }
-h2 { font-size: clamp(1.6rem, 3.4vw, 2.2rem); }
-h3 { font-size: 1.3rem; }
+h2 { font-size: clamp(1.7rem, 3.6vw, 2.4rem); }
+h3 { font-size: 1.4rem; font-weight: 400; }
 
 p { margin: 0 0 1.2em; }
 
@@ -129,7 +136,7 @@ p { margin: 0 0 1.2em; }
   text-transform: uppercase; color: var(--amber); margin: .4em 0 0; font-weight: 500;
 }
 .hero--page { min-height: clamp(300px, 48vh, 460px); }
-.hero--page .hero__title { font-family: var(--font-head); font-size: clamp(3rem, 8vw, 5rem); letter-spacing: .01em; }
+.hero--page .hero__title { font-family: var(--font-head); font-weight: 300; font-size: clamp(3rem, 8vw, 5.5rem); letter-spacing: .02em; }
 
 /* ---------- page intro (no image) ---------- */
 .page-head { padding: 64px 0 8px; }
