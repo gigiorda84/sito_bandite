@@ -149,16 +149,15 @@ NEWS = [
 def news_items():
     out = []
     for n in NEWS:
-        tag = "a" if n["href"] else "div"
-        href = ' href="%s"' % n["href"] if n["href"] else ""
-        arrow = '<span class="news-arrow" aria-hidden="true">&#8594;</span>' if n["href"] else ""
         out.append(
-            '<{tag} class="news-item"{href}>'
+            '<details class="news-item">'
+            '<summary class="news-summary">'
             '<time class="news-date">{date}</time>'
-            '<div class="news-main"><h3 class="news-title">{title}{arrow}</h3>'
-            '<p class="news-text">{text}</p></div>'
-            '</{tag}>'.format(tag=tag, href=href, date=n["date"], title=n["title"],
-                              arrow=arrow, text=n["text"])
+            '<span class="news-title">{title}</span>'
+            '<span class="news-toggle" aria-hidden="true"></span>'
+            '</summary>'
+            '<div class="news-content"><p class="news-text">{text}</p></div>'
+            '</details>'.format(date=n["date"], title=n["title"], text=n["text"])
         )
     return "\n        ".join(out)
 
