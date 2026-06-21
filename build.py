@@ -20,7 +20,7 @@ ORG_JSONLD = (
     '"logo":"https://bandite.eu/assets/img/bandite-emblem.webp","email":"resonavisse@gmail.com",'
     '"foundingDate":"2023","areaServed":["IT","FR"],'
     '"founder":[{"@type":"Person","name":"Valentina Bosio"},{"@type":"Person","name":"Simona Sala"}],'
-    '"sameAs":["https://simonasala.com"]},'
+    '"sameAs":["https://www.instagram.com/bandite_artivism/","https://www.facebook.com/profile.php?id=61581511497239","https://simonasala.com"]},'
     '{"@type":"WebSite","@id":"https://bandite.eu/#website","name":"BANDITE","url":"https://bandite.eu",'
     '"inLanguage":["en","it","fr"],"publisher":{"@id":"https://bandite.eu/#org"}}'
     ']}</script>'
@@ -71,7 +71,7 @@ TR = {
  "meta_collab": "The alliances and partners that support BANDITE's work — from Ponte tra Culture to Université Grenoble Alpes and the Grotowski Institute.",
  "meta_contacts": "Get in touch with BANDITE — resonavisse@gmail.com — Turin, Val di Susa, Italy.",
  "foot_loc": "Turin &mdash; Val di Susa",
- "foot_works": "Works", "foot_app": "Sonic WalkScape app", "foot_contacts": "Contacts",
+ "foot_works": "Works", "foot_app": "Sonic WalkScape app", "foot_contacts": "Contacts", "foot_follow": "Follow",
  "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala. Photos by Mauro Ujetto.",
  "cta_works": "Explore the works", "cta_app": "Sonic WalkScape app",
  "news_h": "News", "back_about": "&#8249; Back to About",
@@ -169,7 +169,7 @@ TR = {
  "meta_collab": "Le alleanze e i partner che sostengono il lavoro di BANDITE — da Ponte tra Culture all'Université Grenoble Alpes e all'Istituto Grotowski.",
  "meta_contacts": "Contatta BANDITE — resonavisse@gmail.com — Torino, Val di Susa, Italia.",
  "foot_loc": "Torino &mdash; Val di Susa",
- "foot_works": "Opere", "foot_app": "App Sonic WalkScape", "foot_contacts": "Contatti",
+ "foot_works": "Opere", "foot_app": "App Sonic WalkScape", "foot_contacts": "Contatti", "foot_follow": "Seguici",
  "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala. Foto di Mauro Ujetto.",
  "cta_works": "Scopri le opere", "cta_app": "App Sonic WalkScape",
  "news_h": "Novit&agrave;", "back_about": "&#8249; Torna a Chi siamo",
@@ -259,7 +259,7 @@ TR = {
  "meta_collab": "Les alliances et partenaires qui soutiennent le travail de BANDITE — de Ponte tra Culture à l'Université Grenoble Alpes et l'Institut Grotowski.",
  "meta_contacts": "Contactez BANDITE — resonavisse@gmail.com — Turin, Vallée de Suse, Italie.",
  "foot_loc": "Turin &mdash; Vallée de Suse",
- "foot_works": "Œuvres", "foot_app": "Appli Sonic WalkScape", "foot_contacts": "Contacts",
+ "foot_works": "Œuvres", "foot_app": "Appli Sonic WalkScape", "foot_contacts": "Contacts", "foot_follow": "Suivez-nous",
  "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala. Photos de Mauro Ujetto.",
  "cta_works": "Découvrir les œuvres", "cta_app": "Appli Sonic WalkScape",
  "news_h": "Actualités", "back_about": "&#8249; Retour à À propos",
@@ -448,6 +448,11 @@ def foot(lang):
           <a href="{c_works}">{works}</a><br>
           <a href="{c_sonic}">{app}</a>
         </div>
+        <div>
+          {follow}<br>
+          <a href="https://www.instagram.com/bandite_artivism/" target="_blank" rel="noopener">Instagram</a><br>
+          <a href="https://www.facebook.com/profile.php?id=61581511497239" target="_blank" rel="noopener">Facebook</a>
+        </div>
       </div>
     </div>
     <div class="wrap" style="margin-top:28px;font-size:.8rem;opacity:.7">
@@ -459,7 +464,7 @@ def foot(lang):
 </body>
 </html>
 """.format(loc=L["foot_loc"], contacts=L["foot_contacts"], works=L["foot_works"], app=L["foot_app"],
-           credit=L["foot_credit"],
+           credit=L["foot_credit"], follow=L["foot_follow"],
            c_contacts=url(lang, "contacts.html"), c_works=url(lang, "works.html"), c_sonic=url(lang, "sonic-walkscape.html"))
 
 def write(lang, filename, title, desc, body, og_image="/assets/img/hero-home.jpg"):
