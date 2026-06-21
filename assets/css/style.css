@@ -3,7 +3,25 @@
    Static site styles
    =========================================================== */
 
+/* ---------- brand fonts ---------- */
+@font-face {
+  font-family: "Handelson Five";
+  src: url("../fonts/handelson-five.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sailors Condensed";
+  src: url("../fonts/sailors-condensed.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
+  --font-display: "Handelson Five", "Brush Script MT", cursive;
+  --font-head: "Sailors Condensed", "DM Sans", system-ui, sans-serif;
   --bg: #fafafa;
   --fg: #292724;
   --muted: #6b665f;
@@ -37,10 +55,18 @@ img { max-width: 100%; height: auto; display: block; }
 a { color: var(--fg); text-decoration: none; }
 a:hover { color: var(--accent); }
 
-h1, h2, h3 { font-weight: 600; line-height: 1.15; margin: 0 0 .6em; letter-spacing: -0.01em; }
-h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
-h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); }
-h3 { font-size: 1.15rem; }
+h1, h2, h3 { margin: 0 0 .6em; }
+h1 {
+  font-family: var(--font-display);
+  font-weight: 400; line-height: 1.05; letter-spacing: .01em;
+  font-size: clamp(2.4rem, 5.5vw, 3.6rem);
+}
+h2, h3 {
+  font-family: var(--font-head);
+  font-weight: 400; line-height: 1.1; letter-spacing: .02em;
+}
+h2 { font-size: clamp(1.6rem, 3.4vw, 2.2rem); }
+h3 { font-size: 1.3rem; }
 
 p { margin: 0 0 1.2em; }
 
@@ -62,8 +88,9 @@ p { margin: 0 0 1.2em; }
   height: var(--header-h);
 }
 .brand {
-  font-weight: 700; font-size: 1.25rem; letter-spacing: .28em;
-  text-transform: uppercase; color: var(--fg);
+  font-family: var(--font-display);
+  font-weight: 400; font-size: 2rem; line-height: 1; letter-spacing: 0;
+  color: var(--fg); padding-bottom: 4px;
 }
 .brand:hover { color: var(--fg); }
 .brand span { color: var(--accent); }
@@ -98,15 +125,16 @@ p { margin: 0 0 1.2em; }
 }
 .hero__inner { position: relative; z-index: 2; padding-bottom: 56px; }
 .hero__title {
-  font-size: clamp(2.6rem, 9vw, 6rem); letter-spacing: .14em;
-  text-transform: uppercase; font-weight: 700; margin: 0; color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(3.4rem, 11vw, 7.5rem); letter-spacing: .01em;
+  text-transform: none; font-weight: 400; line-height: 1; margin: 0; color: #fff;
 }
 .hero__tag {
   font-size: clamp(1rem, 2.5vw, 1.4rem); letter-spacing: .35em;
   text-transform: uppercase; color: var(--amber); margin: .4em 0 0; font-weight: 500;
 }
 .hero--page { min-height: clamp(300px, 48vh, 460px); }
-.hero--page .hero__title { font-size: clamp(2rem, 6vw, 3.4rem); letter-spacing: .06em; }
+.hero--page .hero__title { font-size: clamp(3rem, 8vw, 5rem); letter-spacing: .01em; }
 
 /* ---------- page intro (no image) ---------- */
 .page-head { padding: 64px 0 8px; }
@@ -211,7 +239,7 @@ p { margin: 0 0 1.2em; }
 .site-footer__inner { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: flex-start; }
 .site-footer a { color: var(--muted); }
 .site-footer a:hover { color: var(--accent); }
-.site-footer .fbrand { font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--fg); }
+.site-footer .fbrand { font-family: var(--font-display); font-weight: 400; font-size: 1.7rem; color: var(--fg); }
 .site-footer .cols { display: flex; gap: 48px; flex-wrap: wrap; }
 
 /* ---------- responsive ---------- */

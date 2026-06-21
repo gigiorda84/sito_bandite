@@ -4,3 +4,12 @@ _extract_*.txt
 _dl_*.txt
 _assetmap.txt
 _home.html
+
+# font-build working files (sources, zips, extracted)
+_fonts_raw/
+*.zip
+
+# brand source material (not part of the website)
+*.pdf
+!assets/docs/*.pdf
+FR.png
