@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://bandite.eu/sitemap.xml
