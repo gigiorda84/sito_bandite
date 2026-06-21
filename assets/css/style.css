@@ -57,8 +57,8 @@ a:hover { color: var(--accent); }
 
 h1, h2, h3 { margin: 0 0 .6em; }
 h1 {
-  font-family: var(--font-display);
-  font-weight: 400; line-height: 1.05; letter-spacing: .01em;
+  font-family: var(--font-head);
+  font-weight: 400; line-height: 1.1; letter-spacing: .01em;
   font-size: clamp(2.4rem, 5.5vw, 3.6rem);
 }
 h2, h3 {
@@ -134,7 +134,7 @@ p { margin: 0 0 1.2em; }
   text-transform: uppercase; color: var(--amber); margin: .4em 0 0; font-weight: 500;
 }
 .hero--page { min-height: clamp(300px, 48vh, 460px); }
-.hero--page .hero__title { font-size: clamp(3rem, 8vw, 5rem); letter-spacing: .01em; }
+.hero--page .hero__title { font-family: var(--font-head); font-size: clamp(3rem, 8vw, 5rem); letter-spacing: .01em; }
 
 /* ---------- page intro (no image) ---------- */
 .page-head { padding: 64px 0 8px; }
