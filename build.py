@@ -4,11 +4,27 @@
 BANDITE static site generator — trilingual (EN root, IT in /it/, FR in /fr/).
 All text content lives in TR below. Run from the repo root:  python3 build.py
 """
-import os, html
+import os, html, re, datetime
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE_URL = "https://bandite.eu"
 LANGS = ["en", "it", "fr"]
+OG_LOCALE = {"en": "en_GB", "it": "it_IT", "fr": "fr_FR"}
+BUILD_DATE = datetime.date.today().isoformat()
+
+ORG_JSONLD = (
+    '<script type="application/ld+json">'
+    '{"@context":"https://schema.org","@graph":['
+    '{"@type":["Organization","PerformingGroup"],"@id":"https://bandite.eu/#org",'
+    '"name":"BANDITE","alternateName":"BANDITE \\u2014 artivism","url":"https://bandite.eu",'
+    '"logo":"https://bandite.eu/assets/img/bandite-emblem.webp","email":"resonavisse@gmail.com",'
+    '"foundingDate":"2023","areaServed":["IT","FR"],'
+    '"founder":[{"@type":"Person","name":"Valentina Bosio"},{"@type":"Person","name":"Simona Sala"}],'
+    '"sameAs":["https://simonasala.com"]},'
+    '{"@type":"WebSite","@id":"https://bandite.eu/#website","name":"BANDITE","url":"https://bandite.eu",'
+    '"inLanguage":["en","it","fr"],"publisher":{"@id":"https://bandite.eu/#org"}}'
+    ']}</script>'
+)
 
 # Pages in the nav: (filename, nav-key)
 NAV = [
@@ -50,6 +66,10 @@ TR = {
  "name": "English",
  "nav": {"about":"About","works":"Works","sonic":"Sonic WalkScape","resonavisse":"Resonavisse","press":"Press","collaborations":"Collaborations","contacts":"Contacts"},
  "meta_home": "BANDITE is an art-activism collective founded in 2023 by Valentina Bosio and Simona Sala, working at the border between Italy and France through sonic walkscapes, performance and memory.",
+ "meta_about": "BANDITE — the art-activism collective of Valentina Bosio and Simona Sala, working across theatre, sound, performance and memory on the Italian–French border.",
+ "meta_sonic": "Download BANDITE's Sonic WalkScape app for iPhone and Android and discover how to experience the geolocated immersive soundwalks Unseen and Presenti Mai Assenti.",
+ "meta_collab": "The alliances and partners that support BANDITE's work — from Ponte tra Culture to Université Grenoble Alpes and the Grotowski Institute.",
+ "meta_contacts": "Get in touch with BANDITE — resonavisse@gmail.com — Turin, Val di Susa, Italy.",
  "foot_loc": "Turin &mdash; Val di Susa",
  "foot_works": "Works", "foot_app": "Sonic WalkScape app", "foot_contacts": "Contacts",
  "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala. Photos by Mauro Ujetto.",
@@ -144,6 +164,10 @@ TR = {
  "name": "Italiano",
  "nav": {"about":"Chi siamo","works":"Opere","sonic":"Sonic WalkScape","resonavisse":"Resonavisse","press":"Stampa","collaborations":"Collaborazioni","contacts":"Contatti"},
  "meta_home": "BANDITE è un collettivo di art-activism fondato nel 2023 da Valentina Bosio e Simona Sala, attivo sul confine tra Italia e Francia attraverso sonic walkscape, performance e memoria.",
+ "meta_about": "BANDITE — il collettivo di art-activism di Valentina Bosio e Simona Sala, tra teatro, suono, performance e memoria sul confine italo-francese.",
+ "meta_sonic": "Scarica l'app Sonic WalkScape di BANDITE per iPhone e Android e scopri come vivere le camminate sonore immersive geolocalizzate Unseen e Presenti Mai Assenti.",
+ "meta_collab": "Le alleanze e i partner che sostengono il lavoro di BANDITE — da Ponte tra Culture all'Université Grenoble Alpes e all'Istituto Grotowski.",
+ "meta_contacts": "Contatta BANDITE — resonavisse@gmail.com — Torino, Val di Susa, Italia.",
  "foot_loc": "Torino &mdash; Val di Susa",
  "foot_works": "Opere", "foot_app": "App Sonic WalkScape", "foot_contacts": "Contatti",
  "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala. Foto di Mauro Ujetto.",
@@ -230,6 +254,10 @@ TR = {
  "name": "Français",
  "nav": {"about":"À propos","works":"Œuvres","sonic":"Sonic WalkScape","resonavisse":"Resonavisse","press":"Presse","collaborations":"Collaborations","contacts":"Contacts"},
  "meta_home": "BANDITE est un collectif d&rsquo;art-activisme fondé en 2023 par Valentina Bosio et Simona Sala, actif à la frontière entre l&rsquo;Italie et la France à travers des sonic walkscapes, la performance et la mémoire.",
+ "meta_about": "BANDITE — le collectif d'art-activisme de Valentina Bosio et Simona Sala, entre théâtre, son, performance et mémoire à la frontière italo-française.",
+ "meta_sonic": "Téléchargez l'appli Sonic WalkScape de BANDITE pour iPhone et Android et découvrez comment vivre les marches sonores immersives géolocalisées Unseen et Presenti Mai Assenti.",
+ "meta_collab": "Les alliances et partenaires qui soutiennent le travail de BANDITE — de Ponte tra Culture à l'Université Grenoble Alpes et l'Institut Grotowski.",
+ "meta_contacts": "Contactez BANDITE — resonavisse@gmail.com — Turin, Vallée de Suse, Italie.",
  "foot_loc": "Turin &mdash; Vallée de Suse",
  "foot_works": "Œuvres", "foot_app": "Appli Sonic WalkScape", "foot_contacts": "Contacts",
  "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala. Photos de Mauro Ujetto.",
@@ -347,6 +375,13 @@ def head(lang, filename, title, desc, og_image="/assets/img/hero-home.jpg"):
         '  <link rel="alternate" hreflang="{lg}" href="{u}">'.format(lg=lg, u=SITE_URL + url(lg, filename))
         for lg in LANGS
     ) + '\n  <link rel="alternate" hreflang="x-default" href="{u}">'.format(u=SITE_URL + url("en", filename))
+    og_loc = '  <meta property="og:locale" content="%s">\n' % OG_LOCALE[lang]
+    og_loc += "\n".join('  <meta property="og:locale:alternate" content="%s">' % OG_LOCALE[lg] for lg in LANGS if lg != lang)
+    # clean + truncate the meta description (strip tags, decode entities)
+    d = html.unescape(re.sub(r"<[^>]+>", "", desc)).strip()
+    if len(d) > 160:
+        d = d[:157].rsplit(" ", 1)[0].rstrip(",;:") + "…"
+    desc = html.escape(d)
     return """<!doctype html>
 <html lang="{lang}">
 <head>
@@ -354,14 +389,19 @@ def head(lang, filename, title, desc, og_image="/assets/img/hero-home.jpg"):
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{title}</title>
   <meta name="description" content="{desc}">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#fafafa">
   <link rel="canonical" href="{site}{canon}">
 {alt}
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BANDITE">
   <meta property="og:title" content="{title}">
   <meta property="og:description" content="{desc}">
   <meta property="og:image" content="{site}{og}">
   <meta property="og:url" content="{site}{canon}">
+{og_loc}
   <meta name="twitter:card" content="summary_large_image">
+  {jsonld}
   <link rel="icon" type="image/png" href="/assets/img/favicon.png">
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
   <link rel="preload" href="/assets/fonts/roboto-condensed.woff2" as="font" type="font/woff2" crossorigin>
@@ -383,13 +423,16 @@ def head(lang, filename, title, desc, og_image="/assets/img/hero-home.jpg"):
       </nav>
     </div>
   </header>
-""".format(lang=lang, title=html.escape(title), desc=html.escape(desc),
+  <main>
+""".format(lang=lang, title=html.escape(title), desc=desc,
            site=SITE_URL, canon=url(lang, filename), og=og_image,
-           alt=alt, nav=nav, switch=switch, home=url(lang, "index.html"))
+           alt=alt, og_loc=og_loc, jsonld=ORG_JSONLD,
+           nav=nav, switch=switch, home=url(lang, "index.html"))
 
 def foot(lang):
     L = TR[lang]
     return """
+  </main>
   <footer class="site-footer">
     <div class="wrap site-footer__inner">
       <div>
@@ -507,7 +550,7 @@ def build_all(lang):
   </section>
 """.format(kicker=L["about_kicker"], title=L["about_title"], p=paras(L["about"]),
            simona=url(lang, "simona-sala.html"), valentina=url(lang, "valentina-bosio.html"))
-    write(lang, "about.html", "%s — BANDITE" % L["about_title"], L["meta_home"], about)
+    write(lang, "about.html", "%s — BANDITE" % L["about_title"], L["meta_about"], about)
 
     # ---- VALENTINA ----
     val = """
@@ -518,7 +561,7 @@ def build_all(lang):
   </div></section>
 """.format(k=L["valentina_kicker"], t=L["valentina_title"], p=paras(L["valentina"]),
            about=url(lang, "about.html"), back=L["back_about"])
-    write(lang, "valentina-bosio.html", "Valentina Bosio — BANDITE", L["valentina"][0][:150], val)
+    write(lang, "valentina-bosio.html", "Valentina Bosio — BANDITE", L["valentina"][0], val)
 
     # ---- SIMONA ----
     sim = """
@@ -530,7 +573,7 @@ def build_all(lang):
   </div></section>
 """.format(k=L["simona_kicker"], t=L["simona_title"], p=paras(L["simona"]), link=L["simona_link"],
            about=url(lang, "about.html"), back=L["back_about"])
-    write(lang, "simona-sala.html", "Simona Sala — BANDITE", L["simona"][0][:150], sim)
+    write(lang, "simona-sala.html", "Simona Sala — BANDITE", L["simona"][0], sim)
 
     # ---- WORKS ----
     works = """
@@ -563,7 +606,7 @@ def build_all(lang):
   <div class="wrap read"><div class="figure"><img src="/assets/img/unseen-info.jpg" alt="UNSEEN" loading="lazy"></div></div>
   </section>
 """.format(tag=L["unseen_tag"], h2=L["unseen_h2"], p=paras(L["unseen"]), sonic=url(lang, "sonic-walkscape.html"), cta=L["unseen_cta"])
-    write(lang, "unseen.html", "Unseen — BANDITE", L["unseen"][0][:150].replace("<strong>","").replace("</strong>",""), unseen, og_image="/assets/img/unseen-hero.jpg")
+    write(lang, "unseen.html", "Unseen — BANDITE", L["unseen"][0], unseen, og_image="/assets/img/unseen-hero.jpg")
 
     # ---- ORIZZONTI VERTICALI ----
     ov = """
@@ -606,7 +649,7 @@ def build_all(lang):
   </div></section>
 """.format(k=L["sonic_kicker"], t=L["sonic_title"], sub=L["sonic_sub"], iphone=L["sonic_iphone"], android=L["sonic_android"],
            need_h=L["sonic_need_h"], need=L["sonic_need"], how_h=L["sonic_how_h"], how=L["sonic_how"], end=L["sonic_end"])
-    write(lang, "sonic-walkscape.html", "Sonic WalkScape — BANDITE", L["meta_home"], sonic)
+    write(lang, "sonic-walkscape.html", "Sonic WalkScape — BANDITE", L["meta_sonic"], sonic)
 
     # ---- RESONAVISSE ----
     reso = """
@@ -619,7 +662,7 @@ def build_all(lang):
   <div class="wrap read"><div class="figure figure--center"><img src="/assets/img/resonavisse-logo.png" alt="Resonavisse" loading="lazy"></div></div>
   </section>
 """.format(t=L["reso_title"], p=paras(L["reso"]))
-    write(lang, "resonavisse.html", "Resonavisse — BANDITE", L["reso"][0][:150].replace("<strong>","").replace("</strong>","").replace("<em>","").replace("</em>",""), reso, og_image="/assets/img/resonavisse-hero.jpg")
+    write(lang, "resonavisse.html", "Resonavisse — BANDITE", L["reso"][0], reso, og_image="/assets/img/resonavisse-hero.jpg")
 
     # ---- STAMPA ----
     press_items = "\n".join(
@@ -641,7 +684,7 @@ def build_all(lang):
 {items}
   </div></div></section>
 """.format(k=("Network" if lang=="en" else ("Rete" if lang=="it" else "Réseau")), t=L["nav"]["collaborations"], items=logo_items)
-    write(lang, "collaborations.html", "%s — BANDITE" % L["nav"]["collaborations"], L["meta_home"], collab)
+    write(lang, "collaborations.html", "%s — BANDITE" % L["nav"]["collaborations"], L["meta_collab"], collab)
 
     # ---- CONTACTS ----
     contacts = """
@@ -655,7 +698,7 @@ def build_all(lang):
     </div>
   </div></section>
 """.format(k=L["contacts_kicker"], t=L["contacts_title"], meta=L["contacts_meta"], sonic=url(lang, "sonic-walkscape.html"), app=L["contacts_app"])
-    write(lang, "contacts.html", "%s — BANDITE" % L["contacts_title"], L["contacts_meta"], contacts)
+    write(lang, "contacts.html", "%s — BANDITE" % L["contacts_title"], L["meta_contacts"], contacts)
 
     # ---- 404 ----
     nf = """
@@ -673,15 +716,22 @@ for lg in LANGS:
     build_all(lg)
     print("built:", lg)
 
-# sitemap (all languages)
+# sitemap (all languages, with hreflang alternates + lastmod)
 pages = ["index.html","about.html","works.html","sonic-walkscape.html","resonavisse.html",
          "stampa.html","collaborations.html","contacts.html","unseen.html",
          "orizzonti-verticali.html","presenti-mai-assenti.html","valentina-bosio.html","simona-sala.html"]
 urls = ""
-for lg in LANGS:
-    for p in pages:
-        urls += "  <url><loc>%s%s</loc></url>\n" % (SITE_URL, url(lg, p))
+for p in pages:
+    alts = "".join(
+        '    <xhtml:link rel="alternate" hreflang="%s" href="%s%s"/>\n' % (lg, SITE_URL, url(lg, p))
+        for lg in LANGS
+    ) + '    <xhtml:link rel="alternate" hreflang="x-default" href="%s%s"/>\n' % (SITE_URL, url("en", p))
+    for lg in LANGS:
+        urls += '  <url>\n    <loc>%s%s</loc>\n    <lastmod>%s</lastmod>\n%s  </url>\n' % (
+            SITE_URL, url(lg, p), BUILD_DATE, alts)
 with open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8") as f:
-    f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + '</urlset>\n')
+    f.write('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+            'xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + urls + '</urlset>\n')
 
 print("\nDone — EN at root, IT in /it/, FR in /fr/.")
