@@ -25,6 +25,13 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: "Roboto Condensed";
+  src: url("../fonts/roboto-condensed.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --font-display: "Handelson Five", "Brush Script MT", cursive;
@@ -49,10 +56,10 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 17px;
-  line-height: 1.7;
-  font-weight: 400;
+  font-family: "Roboto Condensed", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 18px;
+  line-height: 1.65;
+  font-weight: 300;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -137,6 +144,13 @@ p { margin: 0 0 1.2em; }
 }
 .hero--page { min-height: clamp(300px, 48vh, 460px); }
 .hero--page .hero__title { font-family: var(--font-head); font-weight: 300; font-size: clamp(3rem, 8vw, 5.5rem); letter-spacing: .02em; }
+/* homepage hero is image-only (no text) */
+.hero--home::after { background: none; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
 
 /* ---------- page intro (no image) ---------- */
 .page-head { padding: 64px 0 8px; }
