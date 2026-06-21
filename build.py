@@ -54,7 +54,7 @@ def head(title, desc, current, og_image="assets/img/hero-home.jpg"):
 <body>
   <header class="site-header">
     <div class="wrap site-header__inner">
-      <a class="brand" href="index.html">Bandi<span>te</span></a>
+      <a class="brand" href="index.html" aria-label="BANDITE — artivism"><img src="assets/img/bandite-wordmark.svg" alt="BANDITE — artivism" width="118" height="66"></a>
       <button class="nav-toggle" aria-label="Menu" aria-controls="nav" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -70,8 +70,8 @@ FOOT = """
   <footer class="site-footer">
     <div class="wrap site-footer__inner">
       <div>
-        <div class="fbrand">Bandite</div>
-        <p style="margin:.6em 0 0">artivism · Turin — Val di Susa</p>
+        <img class="fbrand" src="assets/img/bandite-wordmark.svg" alt="BANDITE — artivism" width="150" height="84">
+        <p style="margin:.8em 0 0">Turin — Val di Susa</p>
       </div>
       <div class="cols">
         <div>
@@ -147,6 +147,9 @@ about_body = """
   <div class="wrap page-head read">
     <div class="kicker">The collective</div>
     <h1>About</h1>
+  </div>
+  <div class="wrap">
+    <figure class="emblem"><img src="assets/img/bandite-emblem.webp" alt="BANDITE — illustration of the collective" width="440" height="440" loading="lazy"></figure>
   </div>
   <section class="section--tight">
     <div class="wrap read prose justify">

@@ -87,13 +87,8 @@ p { margin: 0 0 1.2em; }
   display: flex; align-items: center; justify-content: space-between;
   height: var(--header-h);
 }
-.brand {
-  font-family: var(--font-display);
-  font-weight: 400; font-size: 2rem; line-height: 1; letter-spacing: 0;
-  color: var(--fg); padding-bottom: 4px;
-}
-.brand:hover { color: var(--fg); }
-.brand span { color: inherit; }
+.brand { display: inline-flex; align-items: center; }
+.brand img { height: 42px; width: auto; display: block; }
 
 .nav { display: flex; align-items: center; gap: 26px; }
 .nav a {
@@ -225,6 +220,10 @@ p { margin: 0 0 1.2em; }
 .figure--center { display: flex; justify-content: center; }
 .figure--center img { max-width: 520px; }
 
+/* ---------- brand emblem ---------- */
+.emblem { margin: 8px auto 4px; display: flex; justify-content: center; }
+.emblem img { width: 100%; max-width: 380px; height: auto; }
+
 /* ---------- contacts ---------- */
 .contact-big { font-size: clamp(1.5rem, 5vw, 2.6rem); font-weight: 600; letter-spacing: -.01em; }
 .contact-big a { color: var(--fg); }
@@ -239,7 +238,7 @@ p { margin: 0 0 1.2em; }
 .site-footer__inner { display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: flex-start; }
 .site-footer a { color: var(--muted); }
 .site-footer a:hover { color: var(--accent); }
-.site-footer .fbrand { font-family: var(--font-display); font-weight: 400; font-size: 1.7rem; color: var(--fg); }
+.site-footer .fbrand { height: 50px; width: auto; display: block; }
 .site-footer .cols { display: flex; gap: 48px; flex-wrap: wrap; }
 
 /* ---------- responsive ---------- */
