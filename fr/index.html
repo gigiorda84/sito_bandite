@@ -27,7 +27,7 @@
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
   <link rel="preload" href="/assets/fonts/roboto-condensed.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/handelson-five.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=3">
 </head>
 <body>
   <header class="site-header">
@@ -71,42 +71,58 @@
   <section class="section news" id="news">
     <div class="wrap">
       <h2 class="news-heading">Actualités</h2>
-      <div class="news-list">
-        <div class="news-item news-static"><div class="news-summary"><time class="news-date">3&ndash;5 juillet 2026</time><span class="news-title">Master Salute Collettiva &ndash; Residenziale Oulx, Val di Susa &ndash; Università di Parma</span></div></div>
-        <div class="news-item news-static"><div class="news-summary"><time class="news-date">3&ndash;4 octobre 2026</time><span class="news-title">Rifugiati in rifugio</span></div></div>
-        <details class="news-item"><summary class="news-summary"><time class="news-date">Mars&ndash;Juin 2026</time><span class="news-title">Esistenze Plurali &mdash; intersezioni di cartografie sensibili</span><span class="news-toggle" aria-hidden="true"></span></summary><div class="news-content"><p class="news-text">Un projet d&rsquo;atelier participatif et performatif conçu et organisé par le collectif BANDITE dans le cadre de Torino Multisemiotica (Université de Turin). Destiné aux jeunes de 18 à 25 ans issus de parcours migratoires, il transforme le plurilinguisme et la différence culturelle en ressources génératives, aboutissant à une archive vivante et multimédia.</p></div></details>
-        <details class="news-item"><summary class="news-summary"><time class="news-date">13 nov. 2025</time><span class="news-title">Le premier événement de Resonavisse : fêtons ensemble</span><span class="news-toggle" aria-hidden="true"></span></summary><div class="news-content"><p class="news-text">Pour célébrer la naissance de RESONAVISSE, une soirée au Ramo d&rsquo;Oro (Galleria Umberto I, Turin) entre exposition, installation immersive, performance live électroacoustique et DJ set &mdash; terres cuites de Massimiliano Todisco, <em>Al&egrave;theia || traces</em> de Simona Sala, musique live de Mildred et Ansss. Ouverture 18h30, live 19h30.</p></div></details>
-        <details class="news-item"><summary class="news-summary"><time class="news-date">Nouveau &middot; 2025</time><span class="news-title">Resonavisse &mdash; notre nouvelle association culturelle</span><span class="news-toggle" aria-hidden="true"></span></summary><div class="news-content"><p class="news-text">RESONAVISSE &mdash; du latin <em>resonare</em>, &laquo;&nbsp;avoir résonné&nbsp;&raquo; &mdash; est désormais officiellement active : une association culturelle et artistique conçue comme un espace vivant d&rsquo;exploration, de création et de partage, où se rencontrent pratiques artistiques, expériences humaines et savoirs multiples.</p></div></details>
-        <details class="news-item"><summary class="news-summary"><time class="news-date">En cours</time><span class="news-title">Unseen#1 &mdash; Montgen&egrave;vre &ndash; La Vachette (France)</span><span class="news-toggle" aria-hidden="true"></span></summary><div class="news-content"><p class="news-text">Une nouvelle œuvre in situ sur l&rsquo;histoire de Blessing Matthew, coproduite par l&rsquo;Université Grenoble Alpes pour la recherche DisFrontAlp de la géographe Cristina Del Biaggio, rendue possible par le &laquo;&nbsp;Soutien aux projets de recherche en création 2025&nbsp;&raquo; de la SFR Création.</p></div></details>
+      <div class="news-group" id="newsUpcoming">
+        <h3 class="news-subhead">À venir</h3>
+        <div class="news-list" data-news-list="upcoming">
+        <div class="news-item news-static" data-date="2026-07-05"><div class="news-summary"><time class="news-date">3&ndash;5 juillet 2026</time><span class="news-title">Master Salute Collettiva &ndash; Residenziale Oulx, Val di Susa &ndash; Università di Parma</span></div></div>
+        <div class="news-item news-static" data-date="2026-10-04"><div class="news-summary"><time class="news-date">3&ndash;4 octobre 2026</time><span class="news-title">Rifugiati in rifugio</span></div></div>
+        <details class="news-item" data-date="2026-06"><summary class="news-summary"><time class="news-date">Mars&ndash;Juin 2026</time><span class="news-title">Esistenze Plurali &mdash; intersezioni di cartografie sensibili</span><span class="news-toggle" aria-hidden="true"></span></summary><div class="news-content"><p class="news-text">Un projet d&rsquo;atelier participatif et performatif conçu et organisé par le collectif BANDITE dans le cadre de Torino Multisemiotica (Université de Turin). Destiné aux jeunes de 18 à 25 ans issus de parcours migratoires, il transforme le plurilinguisme et la différence culturelle en ressources génératives, aboutissant à une archive vivante et multimédia.</p></div></details>
+        <details class="news-item" data-date="2025-11-13"><summary class="news-summary"><time class="news-date">13 nov. 2025</time><span class="news-title">Le premier événement de Resonavisse : fêtons ensemble</span><span class="news-toggle" aria-hidden="true"></span></summary><div class="news-content"><p class="news-text">Pour célébrer la naissance de RESONAVISSE, une soirée au Ramo d&rsquo;Oro (Galleria Umberto I, Turin) entre exposition, installation immersive, performance live électroacoustique et DJ set &mdash; terres cuites de Massimiliano Todisco, <em>Al&egrave;theia || traces</em> de Simona Sala, musique live de Mildred et Ansss. Ouverture 18h30, live 19h30.</p></div></details>
+        <details class="news-item" data-date="2025-11"><summary class="news-summary"><time class="news-date">Novembre 2025</time><span class="news-title">Resonavisse &mdash; notre nouvelle association culturelle</span><span class="news-toggle" aria-hidden="true"></span></summary><div class="news-content"><p class="news-text">RESONAVISSE &mdash; du latin <em>resonare</em>, &laquo;&nbsp;avoir résonné&nbsp;&raquo; &mdash; est désormais officiellement active : une association culturelle et artistique conçue comme un espace vivant d&rsquo;exploration, de création et de partage, où se rencontrent pratiques artistiques, expériences humaines et savoirs multiples.</p></div></details>
+        <details class="news-item" data-date=""><summary class="news-summary"><time class="news-date">En cours</time><span class="news-title">Unseen#1 &mdash; Montgen&egrave;vre &ndash; La Vachette (France)</span><span class="news-toggle" aria-hidden="true"></span></summary><div class="news-content"><p class="news-text">Une nouvelle œuvre in situ sur l&rsquo;histoire de Blessing Matthew, coproduite par l&rsquo;Université Grenoble Alpes pour la recherche DisFrontAlp de la géographe Cristina Del Biaggio, rendue possible par le &laquo;&nbsp;Soutien aux projets de recherche en création 2025&nbsp;&raquo; de la SFR Création.</p></div></details>
+        </div>
+      </div>
+      <div class="news-group" id="newsPast" hidden>
+        <h3 class="news-subhead">Passés</h3>
+        <div class="news-list" data-news-list="past"></div>
       </div>
     </div>
   </section>
+  <script>
+  (function(){
+    var up=document.querySelector('[data-news-list="upcoming"]');
+    var past=document.querySelector('[data-news-list="past"]');
+    if(!up||!past) return;
+    var now=new Date(); now.setHours(0,0,0,0); var t=now.getTime();
+    function cutoff(d){
+      if(!d) return Infinity;                                       // ongoing -> stays Upcoming
+      var p=d.split('-'), y=+p[0];
+      if(p.length===3) return new Date(y,+p[1]-1,+p[2]).getTime();  // exact day
+      if(p.length===2) return new Date(y,+p[1],0).getTime();        // last day of month
+      return new Date(y,11,31).getTime();                           // last day of year
+    }
+    var ups=[], pasts=[];
+    [].slice.call(up.querySelectorAll('.news-item')).forEach(function(el){
+      var c=cutoff(el.getAttribute('data-date')); el._k=c;
+      (t>c?pasts:ups).push(el);
+    });
+    ups.sort(function(a,b){return a._k-b._k;});      // soonest first, ongoing last
+    pasts.sort(function(a,b){return b._k-a._k;});    // most recent first
+    ups.forEach(function(el){ up.appendChild(el); });
+    pasts.forEach(function(el){ past.appendChild(el); });
+    document.getElementById('newsUpcoming').hidden = ups.length===0;
+    document.getElementById('newsPast').hidden = pasts.length===0;
+  })();
+  </script>
 
   </main>
   <footer class="site-footer">
     <div class="wrap site-footer__inner">
-      <div>
-        <img class="fbrand" src="/assets/img/bandite-wordmark.svg" alt="BANDITE — artivism" width="150" height="84">
-        <p style="margin:.8em 0 0">Turin &mdash; Vallée de Suse</p>
-      </div>
-      <div class="cols">
-        <div>
-          <a href="/fr/contacts.html">Contacts</a><br>
-          <a href="mailto:resonavisse@gmail.com">resonavisse@gmail.com</a>
-        </div>
-        <div>
-          <a href="/fr/works.html">Œuvres</a><br>
-          <a href="/fr/sonic-walkscape.html">Appli Sonic WalkScape</a>
-        </div>
-        <div>
-          Suivez-nous<br>
-          <a href="https://www.instagram.com/bandite_artivism/" target="_blank" rel="noopener">Instagram</a><br>
-          <a href="https://www.facebook.com/profile.php?id=61581511497239" target="_blank" rel="noopener">Facebook</a>
-        </div>
-      </div>
+      <p class="footer-brand"><img class="fbrand" src="/assets/img/bandite-wordmark.svg" alt="BANDITE — artivism" width="120" height="67"><span class="footer-tag">Turin &mdash; Vallée de Suse</span></p>
+      <div class="social"><a href="mailto:resonavisse@gmail.com" aria-label="Email" title="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7.5 8.5 6 8.5-6"/></svg></a><a href="https://www.instagram.com/bandite_artivism/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a><a href="https://www.facebook.com/profile.php?id=61581511497239" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.51 1.49-3.9 3.78-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg></a><a href="/fr/sonic-walkscape.html" aria-label="Appli Sonic WalkScape" title="Appli Sonic WalkScape"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg></a></div>
     </div>
-    <div class="wrap" style="margin-top:28px;font-size:.8rem;opacity:.7">
-      © <span id="yr">2026</span> BANDITE &mdash; Valentina Bosio &amp; Simona Sala. Photos de Mauro Ujetto.
+    <div class="wrap footer-legal">
+      © <span id="yr">2026</span> BANDITE &mdash; Valentina Bosio &amp; Simona Sala
     </div>
   </footer>
   <script src="/assets/js/main.js"></script>

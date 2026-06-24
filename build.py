@@ -26,6 +26,66 @@ ORG_JSONLD = (
     ']}</script>'
 )
 
+# ---------- social / donation ----------
+INSTAGRAM = "https://www.instagram.com/bandite_artivism/"
+FACEBOOK = "https://www.facebook.com/profile.php?id=61581511497239"
+EMAIL = "resonavisse@gmail.com"
+PAYPAL = "https://www.paypal.com/donate/?business=RESONAVISSE%40GMAIL.COM&no_recurring=0&currency_code=EUR"
+SATISPAY = "https://web.satispay.com/app/open/shops/9e84213e-eae7-40de-9ded-952e7f2cb4f2"
+
+ICON_MAIL = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" '
+             'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+             '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7.5 8.5 6 8.5-6"/></svg>')
+ICON_IG = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" '
+           'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+           '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/>'
+           '<circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>')
+ICON_FB = ('<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+           '<path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.51 1.49-3.9 3.78-3.9 '
+           '1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg>')
+ICON_PHONE = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" '
+              'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+              '<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>')
+
+# Credits shown at the bottom of each work page (faithful to the original lebandite.wordpress.com pages;
+# names are language-neutral, role labels kept as on the originals).
+CREDITS_UNSEEN = """<div class="credits">
+        Creazione e drammaturgia <em>Bandite</em><br>
+        Montaggio audio, sound design, mix <em>Valeria Miracapillo</em><br>
+        Voci <em>Cristina Del Biaggio, Simona Sala, Alice Ruotolo &ndash; Gruppo Abele, Silvia Massara &ndash; Sentieri Solidali, Davide Rostan, Nicolas Toselli, Michel Rousseau &ndash; Toutes et Tous Migrants, Theo, Ana&iuml;s Leduc, Herv&eacute;, Christiana Obie</em><br>
+        Canti <em>Jean-Fran&ccedil;ois Favreau, Aleksandra Kotecka, Collectif f&eacute;ministe du Brian&ccedil;onnais</em><br>
+        Beat in traccia &ldquo;Il caso&rdquo; <em>Calogero Dario Bufalino Maranella</em><br>
+        Sviluppo app <em>Giuseppe Giordano</em><br>
+        Valorizzazione della ricerca &laquo;La mort de Blessing Matthew &ndash; Une contre-enqu&ecirc;te sur la violence aux fronti&egrave;res alpines&raquo; (2022), <em>Border Forensics, Toutes et Tous Migrants</em><br>
+        Progetto vincitore del bando <em>SFR Cr&eacute;ation &ndash; Arts in the Alps, Universit&eacute; Grenoble Alpes</em><br>
+        Produzione <em>BANDITE</em><br>
+        Con il supporto di <em>una comunit&agrave; di sostenitrici e sostenitori</em><br>
+        Con il contributo di <em>Maison de la Cr&eacute;ation et de l&rsquo;Innovation (MaCI), Pacte &ndash; Laboratoire de sciences sociales, Universit&eacute; Grenoble Alpes</em><br>
+        Foto <em>Mauro Ujetto</em>
+      </div>"""
+CREDITS_OV = """<div class="credits">
+        <em>production and artistic direction</em> BANDITE<br>
+        <em>exhibition by</em> Enrico Carpegna, Beppe Gromi and Fabio Russo, Simona Sala<br>
+        <em>organization</em> Valentina Bosio, Martina Pasqualetto, Simona Sala<br>
+        <em>texts and research consultancy</em> Valentina Bosio, Piero Gorza, Martina Pasqualetto<br>
+        <em>photo</em> Mauro Ujetto<br>
+        <em>under the patronage of</em> the Municipality of Oulx<br>
+        <em>with the support of</em> Abb&agrave; SAS, Action For odv, Recycle For Refugees Campaign, Clarea Wines of Chiomonte, Associazione Liberamente Insieme of Bardonecchia, On Borders, Sentieri Solidali
+      </div>"""
+CREDITS_PMA = """<div class="credits">
+        <em>Sound installation and field recordings</em> BANDITE &ndash; Valentina Bosio, Simona Sala<br>
+        <em>Sound editing</em> Giuseppe Giordano, Jacopo Salvatore<br>
+        <em>Songs</em> Marjan Vahdat, Selda &Ouml;zturk<br>
+        <em>Poems</em> Rahma Nur / from <em>The Cry and the Whisper</em> &ndash; Capovolte editrice<br>
+        <em>In collaboration with</em> Sentieri Solidali, On Borders<br>
+        <em>Photo credits</em> Mauro Ujetto<br>
+        <em>Video</em> Francesco Arrigoni
+      </div>"""
+
+# Date keys for the homepage news split (same order in every language):
+#   "" ongoing | "YYYY" | "YYYY-MM" | "YYYY-MM-DD"
+NEWS_KEYS = ["2026-07-05", "2026-10-04", "2026-06", "2025-11-13", "2025-11", ""]
+
 # Pages in the nav: (filename, nav-key)
 NAV = [
     ("about.html", "about"),
@@ -72,16 +132,21 @@ TR = {
  "meta_contacts": "Get in touch with BANDITE — resonavisse@gmail.com — Turin, Val di Susa, Italy.",
  "foot_loc": "Turin &mdash; Val di Susa",
  "foot_works": "Works", "foot_app": "Sonic WalkScape app", "foot_contacts": "Contacts", "foot_follow": "Follow",
- "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala. Photos by Mauro Ujetto.",
+ "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala",
  "cta_works": "Explore the works", "cta_app": "Sonic WalkScape app",
  "news_h": "News", "back_about": "&#8249; Back to About",
+ "news_upcoming": "Upcoming", "news_past": "Past",
+ "nl_h": "Newsletter", "nl_p": "Subscribe to receive updates on new works, sonic walkscapes and events.",
+ "nl_name": "Name", "nl_btn": "Subscribe", "nl_note": "Your email app will open with your message ready to send.",
+ "support_h": "Support us", "support_p": "Help us keep BANDITE&rsquo;s projects alive.",
+ "sonic_support": "The project is sustained by donations: your contribution lets us create new walks and new public events.",
  "home_intro": "BANDITE is a collective founded in 2023 by Valentina Bosio and Simona Sala, two artists whose research and creative practices meet at the intersection of art and activism. Their work is rooted in an anthropological approach to physical theatre and moves fluidly across theatre, dance, visual arts, video, and multimedia technologies. Their urgency lies in observing and narrating what remains at the margins: stories and identities rendered invisible or forgotten by dominant narratives.",
  "news": [
    {"date":"3&ndash;5 July 2026","title":"Master Salute Collettiva &ndash; Residenziale Oulx, Val di Susa &ndash; Università di Parma","text":""},
    {"date":"3&ndash;4 October 2026","title":"Rifugiati in rifugio","text":""},
    {"date":"Mar&ndash;Jun 2026","title":"Esistenze Plurali &mdash; intersezioni di cartografie sensibili","text":"A participatory, performative workshop project conceived and curated by BANDITE within Torino Multisemiotica (University of Turin). Addressed to young people aged 18&ndash;25 with migratory backgrounds, it turns multilingualism and cultural difference into generative resources, culminating in a living, multimedia archive."},
    {"date":"13 Nov 2025","title":"Resonavisse&rsquo;s first event: let&rsquo;s party together","text":"To celebrate the birth of RESONAVISSE, an evening at Ramo d&rsquo;Oro (Galleria Umberto I, Turin) between exhibition, immersive installation, electroacoustic live performance and DJ set &mdash; terracotta works by Massimiliano Todisco, <em>Al&egrave;theia || traces</em> by Simona Sala, live music by Mildred and Ansss. Opening 6:30 PM, live 7:30 PM."},
-   {"date":"New &middot; 2025","title":"Resonavisse &mdash; our new cultural association","text":"RESONAVISSE &mdash; from the Latin <em>resonare</em>, &ldquo;to resonate&rdquo; &mdash; is now officially active: a cultural and artistic association conceived as a living space for exploration, creation and sharing, where artistic practices, human experiences and different forms of knowledge meet."},
+   {"date":"November 2025","title":"Resonavisse &mdash; our new cultural association","text":"RESONAVISSE &mdash; from the Latin <em>resonare</em>, &ldquo;to resonate&rdquo; &mdash; is now officially active: a cultural and artistic association conceived as a living space for exploration, creation and sharing, where artistic practices, human experiences and different forms of knowledge meet."},
    {"date":"Work in progress","title":"Unseen#1 &mdash; Montgen&egrave;vre &ndash; La Vachette (France)","text":"A new site-specific artwork on the story of Blessing Matthew, co-produced with Universit&eacute; Grenoble Alpes for the DisFrontAlp research by geographer Cristina Del Biaggio, made possible by &ldquo;Soutien aux projets de recherche en cr&eacute;ation 2025&rdquo; from SFR Cr&eacute;ation."},
  ],
  "about_kicker":"The collective", "about_title":"About",
@@ -170,16 +235,21 @@ TR = {
  "meta_contacts": "Contatta BANDITE — resonavisse@gmail.com — Torino, Val di Susa, Italia.",
  "foot_loc": "Torino &mdash; Val di Susa",
  "foot_works": "Opere", "foot_app": "App Sonic WalkScape", "foot_contacts": "Contatti", "foot_follow": "Seguici",
- "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala. Foto di Mauro Ujetto.",
+ "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala",
  "cta_works": "Scopri le opere", "cta_app": "App Sonic WalkScape",
  "news_h": "Novit&agrave;", "back_about": "&#8249; Torna a Chi siamo",
+ "news_upcoming": "Prossimi", "news_past": "Passati",
+ "nl_h": "Newsletter", "nl_p": "Iscriviti per ricevere aggiornamenti su nuove opere, sonic walkscape ed eventi.",
+ "nl_name": "Nome", "nl_btn": "Iscriviti", "nl_note": "Si aprir&agrave; il tuo programma di posta con il messaggio pronto da inviare.",
+ "support_h": "Sostienici", "support_p": "Aiutaci a portare avanti i progetti di BANDITE.",
+ "sonic_support": "Il progetto si sostiene grazie alle donazioni: il tuo contributo ci permette di creare nuovi percorsi e nuovi eventi pubblici.",
  "home_intro": "BANDITE è un collettivo fondato nel 2023 da Valentina Bosio e Simona Sala, due artiste la cui ricerca e pratica creativa si incontrano all&rsquo;intersezione tra arte e attivismo. Il loro lavoro affonda le radici in un approccio antropologico al teatro fisico e si muove fluidamente tra teatro, danza, arti visive, video e tecnologie multimediali. La loro urgenza sta nell&rsquo;osservare e raccontare ciò che resta ai margini: storie e identità rese invisibili o dimenticate dalle narrazioni dominanti.",
  "news": [
    {"date":"3&ndash;5 luglio 2026","title":"Master Salute Collettiva &ndash; Residenziale Oulx, Val di Susa &ndash; Università di Parma","text":""},
    {"date":"3&ndash;4 ottobre 2026","title":"Rifugiati in rifugio","text":""},
    {"date":"Mar&ndash;Giu 2026","title":"Esistenze Plurali &mdash; intersezioni di cartografie sensibili","text":"Un progetto laboratoriale partecipativo e performativo ideato e curato dal collettivo BANDITE nell&rsquo;ambito di Torino Multisemiotica (Università di Torino). Rivolto a giovani tra i 18 e i 25 anni con background migratorio, trasforma multilinguismo e differenze culturali in risorse generative, culminando in un archivio vivente e multimediale."},
    {"date":"13 nov 2025","title":"Il primo evento di Resonavisse: festeggiamo insieme","text":"Per celebrare la nascita di RESONAVISSE, una serata al Ramo d&rsquo;Oro (Galleria Umberto I, Torino) tra esposizione, installazione immersiva, live elettroacustico e DJ set &mdash; terrecotte di Massimiliano Todisco, <em>Al&egrave;theia || traces</em> di Simona Sala, musica live di Mildred e Ansss. Apertura 18:30, live 19:30."},
-   {"date":"Novit&agrave; &middot; 2025","title":"Resonavisse &mdash; la nostra nuova associazione culturale","text":"RESONAVISSE &mdash; dal latino <em>resonare</em>, &ldquo;essere risuonato&rdquo; &mdash; è ora ufficialmente attiva: un&rsquo;associazione culturale e artistica immaginata come spazio vivo di esplorazione, creazione e condivisione, dove pratiche artistiche, esperienze umane e saperi diversi si incontrano."},
+   {"date":"Novembre 2025","title":"Resonavisse &mdash; la nostra nuova associazione culturale","text":"RESONAVISSE &mdash; dal latino <em>resonare</em>, &ldquo;essere risuonato&rdquo; &mdash; è ora ufficialmente attiva: un&rsquo;associazione culturale e artistica immaginata come spazio vivo di esplorazione, creazione e condivisione, dove pratiche artistiche, esperienze umane e saperi diversi si incontrano."},
    {"date":"Work in progress","title":"Unseen#1 &mdash; Montgen&egrave;vre &ndash; La Vachette (Francia)","text":"Una nuova opera site-specific sulla storia di Blessing Matthew, coproduzione dell&rsquo;Universit&eacute; Grenoble Alpes per la ricerca DisFrontAlp della geografa Cristina Del Biaggio, resa possibile dal contributo &ldquo;Soutien aux projets de recherche en cr&eacute;ation 2025&rdquo; di SFR Cr&eacute;ation."},
  ],
  "about_kicker":"Il collettivo", "about_title":"Chi siamo",
@@ -260,16 +330,21 @@ TR = {
  "meta_contacts": "Contactez BANDITE — resonavisse@gmail.com — Turin, Vallée de Suse, Italie.",
  "foot_loc": "Turin &mdash; Vallée de Suse",
  "foot_works": "Œuvres", "foot_app": "Appli Sonic WalkScape", "foot_contacts": "Contacts", "foot_follow": "Suivez-nous",
- "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala. Photos de Mauro Ujetto.",
+ "foot_credit": "BANDITE &mdash; Valentina Bosio &amp; Simona Sala",
  "cta_works": "Découvrir les œuvres", "cta_app": "Appli Sonic WalkScape",
  "news_h": "Actualités", "back_about": "&#8249; Retour à À propos",
+ "news_upcoming": "À venir", "news_past": "Passés",
+ "nl_h": "Newsletter", "nl_p": "Abonnez-vous pour recevoir des nouvelles des œuvres, des sonic walkscapes et des événements.",
+ "nl_name": "Nom", "nl_btn": "S&rsquo;abonner", "nl_note": "Votre messagerie s&rsquo;ouvrira avec votre message pr&ecirc;t &agrave; envoyer.",
+ "support_h": "Soutenez-nous", "support_p": "Aidez-nous &agrave; faire vivre les projets de BANDITE.",
+ "sonic_support": "Le projet vit gr&acirc;ce aux dons&nbsp;: votre contribution nous permet de cr&eacute;er de nouveaux parcours et de nouveaux &eacute;v&eacute;nements publics.",
  "home_intro": "BANDITE est un collectif fondé en 2023 par Valentina Bosio et Simona Sala, deux artistes dont la recherche et la pratique créative se rejoignent à l&rsquo;intersection de l&rsquo;art et de l&rsquo;activisme. Leur travail s&rsquo;enracine dans une approche anthropologique du théâtre physique et circule librement entre théâtre, danse, arts visuels, vidéo et technologies multimédia. Leur urgence : observer et raconter ce qui demeure aux marges, ces histoires et identités rendues invisibles ou oubliées par les récits dominants.",
  "news": [
    {"date":"3&ndash;5 juillet 2026","title":"Master Salute Collettiva &ndash; Residenziale Oulx, Val di Susa &ndash; Università di Parma","text":""},
    {"date":"3&ndash;4 octobre 2026","title":"Rifugiati in rifugio","text":""},
    {"date":"Mars&ndash;Juin 2026","title":"Esistenze Plurali &mdash; intersezioni di cartografie sensibili","text":"Un projet d&rsquo;atelier participatif et performatif conçu et organisé par le collectif BANDITE dans le cadre de Torino Multisemiotica (Université de Turin). Destiné aux jeunes de 18 à 25 ans issus de parcours migratoires, il transforme le plurilinguisme et la différence culturelle en ressources génératives, aboutissant à une archive vivante et multimédia."},
    {"date":"13 nov. 2025","title":"Le premier événement de Resonavisse : fêtons ensemble","text":"Pour célébrer la naissance de RESONAVISSE, une soirée au Ramo d&rsquo;Oro (Galleria Umberto I, Turin) entre exposition, installation immersive, performance live électroacoustique et DJ set &mdash; terres cuites de Massimiliano Todisco, <em>Al&egrave;theia || traces</em> de Simona Sala, musique live de Mildred et Ansss. Ouverture 18h30, live 19h30."},
-   {"date":"Nouveau &middot; 2025","title":"Resonavisse &mdash; notre nouvelle association culturelle","text":"RESONAVISSE &mdash; du latin <em>resonare</em>, &laquo;&nbsp;avoir résonné&nbsp;&raquo; &mdash; est désormais officiellement active : une association culturelle et artistique conçue comme un espace vivant d&rsquo;exploration, de création et de partage, où se rencontrent pratiques artistiques, expériences humaines et savoirs multiples."},
+   {"date":"Novembre 2025","title":"Resonavisse &mdash; notre nouvelle association culturelle","text":"RESONAVISSE &mdash; du latin <em>resonare</em>, &laquo;&nbsp;avoir résonné&nbsp;&raquo; &mdash; est désormais officiellement active : une association culturelle et artistique conçue comme un espace vivant d&rsquo;exploration, de création et de partage, où se rencontrent pratiques artistiques, expériences humaines et savoirs multiples."},
    {"date":"En cours","title":"Unseen#1 &mdash; Montgen&egrave;vre &ndash; La Vachette (France)","text":"Une nouvelle œuvre in situ sur l&rsquo;histoire de Blessing Matthew, coproduite par l&rsquo;Université Grenoble Alpes pour la recherche DisFrontAlp de la géographe Cristina Del Biaggio, rendue possible par le &laquo;&nbsp;Soutien aux projets de recherche en création 2025&nbsp;&raquo; de la SFR Création."},
  ],
  "about_kicker":"Le collectif", "about_title":"À propos",
@@ -341,6 +416,11 @@ TR = {
 },
 }
 
+# Attach split keys to every language's news list (same order everywhere)
+for _lg in LANGS:
+    for _i, _n in enumerate(TR[_lg]["news"]):
+        _n["key"] = NEWS_KEYS[_i] if _i < len(NEWS_KEYS) else ""
+
 # ============================================================
 #  HELPERS
 # ============================================================
@@ -406,7 +486,7 @@ def head(lang, filename, title, desc, og_image="/assets/img/hero-home.jpg"):
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
   <link rel="preload" href="/assets/fonts/roboto-condensed.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/handelson-five.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=3">
 </head>
 <body>
   <header class="site-header">
@@ -435,27 +515,10 @@ def foot(lang):
   </main>
   <footer class="site-footer">
     <div class="wrap site-footer__inner">
-      <div>
-        <img class="fbrand" src="/assets/img/bandite-wordmark.svg" alt="BANDITE — artivism" width="150" height="84">
-        <p style="margin:.8em 0 0">{loc}</p>
-      </div>
-      <div class="cols">
-        <div>
-          <a href="{c_contacts}">{contacts}</a><br>
-          <a href="mailto:resonavisse@gmail.com">resonavisse@gmail.com</a>
-        </div>
-        <div>
-          <a href="{c_works}">{works}</a><br>
-          <a href="{c_sonic}">{app}</a>
-        </div>
-        <div>
-          {follow}<br>
-          <a href="https://www.instagram.com/bandite_artivism/" target="_blank" rel="noopener">Instagram</a><br>
-          <a href="https://www.facebook.com/profile.php?id=61581511497239" target="_blank" rel="noopener">Facebook</a>
-        </div>
-      </div>
+      <p class="footer-brand"><img class="fbrand" src="/assets/img/bandite-wordmark.svg" alt="BANDITE — artivism" width="120" height="67"><span class="footer-tag">{loc}</span></p>
+      {social}
     </div>
-    <div class="wrap" style="margin-top:28px;font-size:.8rem;opacity:.7">
+    <div class="wrap footer-legal">
       © <span id="yr">2026</span> {credit}
     </div>
   </footer>
@@ -463,9 +526,7 @@ def foot(lang):
   <script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
 </body>
 </html>
-""".format(loc=L["foot_loc"], contacts=L["foot_contacts"], works=L["foot_works"], app=L["foot_app"],
-           credit=L["foot_credit"], follow=L["foot_follow"],
-           c_contacts=url(lang, "contacts.html"), c_works=url(lang, "works.html"), c_sonic=url(lang, "sonic-walkscape.html"))
+""".format(loc=L["foot_loc"], credit=L["foot_credit"], social=social_links(lang, with_app=True))
 
 def write(lang, filename, title, desc, body, og_image="/assets/img/hero-home.jpg"):
     out = head(lang, filename, title, desc, og_image) + body + foot(lang)
@@ -486,6 +547,23 @@ def slideshow(images, alt):
 def paras(items, cls="prose justify"):
     return "\n".join("      <p>%s</p>" % p for p in items)
 
+def social_links(lang, extra_class="", with_app=False):
+    cls = ("social " + extra_class).strip()
+    rows = [
+        ("Email", "mailto:" + EMAIL, ICON_MAIL),
+        ("Instagram", INSTAGRAM, ICON_IG),
+        ("Facebook", FACEBOOK, ICON_FB),
+    ]
+    if with_app:
+        rows.append((TR[lang]["foot_app"], url(lang, "sonic-walkscape.html"), ICON_PHONE))
+    items = "".join(
+        '<a href="{h}"{e} aria-label="{l}" title="{l}">{i}</a>'.format(
+            h=h, l=l, i=i,
+            e=' target="_blank" rel="noopener"' if h.startswith("http") else "")
+        for l, h, i in rows
+    )
+    return '<div class="{c}">{items}</div>'.format(c=cls, items=items)
+
 # ============================================================
 #  PAGE BUILDERS  (per language)
 # ============================================================
@@ -498,15 +576,15 @@ def build_all(lang):
     for n in L["news"]:
         if n.get("text"):
             _news.append(
-                '<details class="news-item"><summary class="news-summary">'
+                '<details class="news-item" data-date="{k}"><summary class="news-summary">'
                 '<time class="news-date">{d}</time><span class="news-title">{t}</span>'
                 '<span class="news-toggle" aria-hidden="true"></span></summary>'
-                '<div class="news-content"><p class="news-text">{x}</p></div></details>'.format(d=n["date"], t=n["title"], x=n["text"]))
+                '<div class="news-content"><p class="news-text">{x}</p></div></details>'.format(k=n.get("key",""), d=n["date"], t=n["title"], x=n["text"]))
         else:
             _news.append(
-                '<div class="news-item news-static"><div class="news-summary">'
+                '<div class="news-item news-static" data-date="{k}"><div class="news-summary">'
                 '<time class="news-date">{d}</time><span class="news-title">{t}</span>'
-                '</div></div>'.format(d=n["date"], t=n["title"]))
+                '</div></div>'.format(k=n.get("key",""), d=n["date"], t=n["title"]))
     news = "\n        ".join(_news)
     home = """
   <section class="hero hero--home" style="background-image:url('/assets/img/hero-home.jpg')">
@@ -526,13 +604,47 @@ def build_all(lang):
   <section class="section news" id="news">
     <div class="wrap">
       <h2 class="news-heading">{news_h}</h2>
-      <div class="news-list">
+      <div class="news-group" id="newsUpcoming">
+        <h3 class="news-subhead">{up}</h3>
+        <div class="news-list" data-news-list="upcoming">
         {news}
+        </div>
+      </div>
+      <div class="news-group" id="newsPast" hidden>
+        <h3 class="news-subhead">{past}</h3>
+        <div class="news-list" data-news-list="past"></div>
       </div>
     </div>
   </section>
+  <script>
+  (function(){{
+    var up=document.querySelector('[data-news-list="upcoming"]');
+    var past=document.querySelector('[data-news-list="past"]');
+    if(!up||!past) return;
+    var now=new Date(); now.setHours(0,0,0,0); var t=now.getTime();
+    function cutoff(d){{
+      if(!d) return Infinity;                                       // ongoing -> stays Upcoming
+      var p=d.split('-'), y=+p[0];
+      if(p.length===3) return new Date(y,+p[1]-1,+p[2]).getTime();  // exact day
+      if(p.length===2) return new Date(y,+p[1],0).getTime();        // last day of month
+      return new Date(y,11,31).getTime();                           // last day of year
+    }}
+    var ups=[], pasts=[];
+    [].slice.call(up.querySelectorAll('.news-item')).forEach(function(el){{
+      var c=cutoff(el.getAttribute('data-date')); el._k=c;
+      (t>c?pasts:ups).push(el);
+    }});
+    ups.sort(function(a,b){{return a._k-b._k;}});      // soonest first, ongoing last
+    pasts.sort(function(a,b){{return b._k-a._k;}});    // most recent first
+    ups.forEach(function(el){{ up.appendChild(el); }});
+    pasts.forEach(function(el){{ past.appendChild(el); }});
+    document.getElementById('newsUpcoming').hidden = ups.length===0;
+    document.getElementById('newsPast').hidden = pasts.length===0;
+  }})();
+  </script>
 """.format(intro=L["home_intro"], works=url(lang, "works.html"), sonic=url(lang, "sonic-walkscape.html"),
-           cta_works=L["cta_works"], cta_app=L["cta_app"], news_h=L["news_h"], news=news)
+           cta_works=L["cta_works"], cta_app=L["cta_app"], news_h=L["news_h"], news=news,
+           up=L["news_upcoming"], past=L["news_past"])
     write(lang, "index.html", "BANDITE — artivism", L["meta_home"], home)
 
     # ---- ABOUT ----
@@ -606,11 +718,12 @@ def build_all(lang):
   <section class="section--tight"><div class="wrap read prose justify">
     <h2 style="text-align:left">{h2}</h2>
 {p}
+      {credits}
     <div class="btn-row"><a class="btn btn--accent" href="{sonic}">{cta}</a></div>
   </div>
   <div class="wrap read"><div class="figure"><img src="/assets/img/unseen-info.jpg" alt="UNSEEN" loading="lazy"></div></div>
   </section>
-""".format(tag=L["unseen_tag"], h2=L["unseen_h2"], p=paras(L["unseen"]), sonic=url(lang, "sonic-walkscape.html"), cta=L["unseen_cta"])
+""".format(tag=L["unseen_tag"], h2=L["unseen_h2"], p=paras(L["unseen"]), sonic=url(lang, "sonic-walkscape.html"), cta=L["unseen_cta"], credits=CREDITS_UNSEEN)
     write(lang, "unseen.html", "Unseen — BANDITE", L["unseen"][0], unseen, og_image="/assets/img/unseen-hero.jpg")
 
     # ---- ORIZZONTI VERTICALI ----
@@ -618,10 +731,11 @@ def build_all(lang):
   <div class="wrap page-head read"><div class="kicker">{k}</div><h1>{t}</h1><p class="sub">{sub}</p></div>
   <section class="section--tight"><div class="wrap read prose justify">
 {p}
+      {credits}
   </div>
   <div class="wrap">{slide}</div>
   </section>
-""".format(k=L["ov_kicker"], t=L["ov_title"], sub=L["ov_sub"], p=paras(L["ov"]), slide=slideshow(OV_IMGS, "Orizzonti Verticali"))
+""".format(k=L["ov_kicker"], t=L["ov_title"], sub=L["ov_sub"], p=paras(L["ov"]), slide=slideshow(OV_IMGS, "Orizzonti Verticali"), credits=CREDITS_OV)
     write(lang, "orizzonti-verticali.html", "Orizzonti Verticali — BANDITE", L["ov_sub"], ov, og_image="/assets/img/ov-1.jpg")
 
     # ---- PRESENTI MAI ASSENTI ----
@@ -629,10 +743,11 @@ def build_all(lang):
   <div class="wrap page-head read"><div class="kicker">{k}</div><h1>{t}</h1><p class="sub">{sub}</p></div>
   <section class="section--tight"><div class="wrap read prose justify">
 {p}
+      {credits}
   </div>
   <div class="wrap">{slide}</div>
   </section>
-""".format(k=L["pma_kicker"], t=L["pma_title"], sub=L["pma_sub"], p=paras(L["pma"]), slide=slideshow(PMA_IMGS, "Presenti Mai Assenti"))
+""".format(k=L["pma_kicker"], t=L["pma_title"], sub=L["pma_sub"], p=paras(L["pma"]), slide=slideshow(PMA_IMGS, "Presenti Mai Assenti"), credits=CREDITS_PMA)
     write(lang, "presenti-mai-assenti.html", "Presenti Mai Assenti — BANDITE", L["pma_sub"], pma, og_image="/assets/img/pma-1.jpg")
 
     # ---- SONIC WALKSCAPE ----
@@ -651,9 +766,18 @@ def build_all(lang):
       <p>{how}</p>
       <p>{end}</p>
     </div>
+    <div class="support">
+      <h2>{support_h}</h2>
+      <p>{support_p}</p>
+      <div class="btn-row">
+        <a class="btn btn--accent" href="{paypal}" target="_blank" rel="noopener">PayPal</a>
+        <a class="btn" href="{satispay}" target="_blank" rel="noopener">Satispay</a>
+      </div>
+    </div>
   </div></section>
 """.format(k=L["sonic_kicker"], t=L["sonic_title"], sub=L["sonic_sub"], iphone=L["sonic_iphone"], android=L["sonic_android"],
-           need_h=L["sonic_need_h"], need=L["sonic_need"], how_h=L["sonic_how_h"], how=L["sonic_how"], end=L["sonic_end"])
+           need_h=L["sonic_need_h"], need=L["sonic_need"], how_h=L["sonic_how_h"], how=L["sonic_how"], end=L["sonic_end"],
+           support_h=L["support_h"], support_p=L["sonic_support"], paypal=PAYPAL, satispay=SATISPAY)
     write(lang, "sonic-walkscape.html", "Sonic WalkScape — BANDITE", L["meta_sonic"], sonic)
 
     # ---- RESONAVISSE ----
@@ -697,12 +821,45 @@ def build_all(lang):
   <section class="section--tight"><div class="wrap read">
     <p class="contact-big"><a href="mailto:resonavisse@gmail.com">resonavisse@gmail.com</a></p>
     <p class="contact-meta">{meta}</p>
-    <div class="btn-row" style="margin-top:2em">
-      <a class="btn" href="https://simonasala.com/" target="_blank" rel="noopener">simonasala.com</a>
-      <a class="btn" href="{sonic}">{app}</a>
+    {social}
+    <div class="support">
+      <h2>{support_h}</h2>
+      <p>{support_p}</p>
+      <div class="btn-row">
+        <a class="btn btn--accent" href="{paypal}" target="_blank" rel="noopener">PayPal</a>
+        <a class="btn" href="{satispay}" target="_blank" rel="noopener">Satispay</a>
+      </div>
+    </div>
+    <div class="newsletter">
+      <h2>{nl_h}</h2>
+      <p>{nl_p}</p>
+      <form class="nl-form" id="nlForm" novalidate>
+        <input type="text" id="nlName" placeholder="{nl_name}" autocomplete="name" required>
+        <input type="email" id="nlEmail" placeholder="Email" autocomplete="email" required>
+        <button type="submit" class="btn btn--accent">{nl_btn}</button>
+      </form>
+      <p class="nl-note" id="nlNote" hidden>{nl_note}</p>
     </div>
   </div></section>
-""".format(k=L["contacts_kicker"], t=L["contacts_title"], meta=L["contacts_meta"], sonic=url(lang, "sonic-walkscape.html"), app=L["contacts_app"])
+  <script>
+  (function(){{
+    var f=document.getElementById('nlForm'); if(!f) return;
+    f.addEventListener('submit', function(e){{
+      e.preventDefault();
+      var n=(document.getElementById('nlName').value||'').trim();
+      var m=(document.getElementById('nlEmail').value||'').trim();
+      if(!n||!m){{ if(f.reportValidity) f.reportValidity(); return; }}
+      var s=encodeURIComponent('Newsletter BANDITE');
+      var b=encodeURIComponent('Nome / Name: '+n+'\\nEmail: '+m);
+      window.location.href='mailto:resonavisse@gmail.com?subject='+s+'&body='+b;
+      var note=document.getElementById('nlNote'); if(note) note.hidden=false;
+    }});
+  }})();
+  </script>
+""".format(k=L["contacts_kicker"], t=L["contacts_title"], meta=L["contacts_meta"],
+           social=social_links(lang, "social--lg"),
+           support_h=L["support_h"], support_p=L["support_p"], paypal=PAYPAL, satispay=SATISPAY,
+           nl_h=L["nl_h"], nl_p=L["nl_p"], nl_name=L["nl_name"], nl_btn=L["nl_btn"], nl_note=L["nl_note"])
     write(lang, "contacts.html", "%s — BANDITE" % L["contacts_title"], L["meta_contacts"], contacts)
 
     # ---- 404 ----
