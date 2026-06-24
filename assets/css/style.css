@@ -365,10 +365,19 @@ p { margin: 0 0 1.2em; }
   }
   .nav.open { transform: translateY(0); }
   .nav a { padding: 13px 0; font-size: .95rem; width: 100%; border-bottom: 1px solid var(--line); }
-  .nav a[aria-current="page"] { border-bottom: 1px solid var(--line); }
+  /* reset the desktop active-link padding-bottom so the current page lines up with the others */
+  .nav a[aria-current="page"] { border-bottom: 1px solid var(--line); padding-bottom: 13px; }
   .lang-switch { margin: 10px 0 0; padding: 14px 0 4px; border-left: 0; border-top: 1px solid var(--line); width: 100%; gap: 18px; }
   .logos { grid-template-columns: repeat(2, 1fr); gap: 22px; }
-  .work-item { flex-direction: column; gap: 6px; }
+  /* compact tappable rows: title + meta stacked on the left, arrow held on the right (no wrapping) */
+  .work-item {
+    display: grid; grid-template-columns: 1fr auto;
+    grid-template-areas: "title arrow" "meta arrow";
+    align-items: center; column-gap: 12px; row-gap: 2px; padding: 16px 20px;
+  }
+  .work-item h3 { grid-area: title; font-size: 1.15rem; }
+  .work-item .meta { grid-area: meta; }
+  .work-item .arrow { grid-area: arrow; }
   .section { padding: 44px 0; }
   /* roomier gutters + ragged-right text so lines don't sit flush to the edge */
   .wrap { padding: 0 26px; }
