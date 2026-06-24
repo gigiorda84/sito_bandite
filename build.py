@@ -486,7 +486,7 @@ def head(lang, filename, title, desc, og_image="/assets/img/hero-home.jpg"):
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
   <link rel="preload" href="/assets/fonts/roboto-condensed.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/handelson-five.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/style.css?v=5">
+  <link rel="stylesheet" href="/assets/css/style.css?v=6">
 </head>
 <body>
   <header class="site-header">

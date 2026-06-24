@@ -156,8 +156,8 @@ p { margin: 0 0 1.2em; }
 .hero--page .hero__title { font-family: var(--font-head); font-weight: 300; font-size: clamp(3rem, 8vw, 5.5rem); letter-spacing: .02em; }
 /* homepage hero is image-only (no text) */
 .hero--home::after { background: none; }
-/* anchor the home photo to the bottom: when cropped (wide window) only the top is cut */
-.hero--home { background-position: center bottom; }
+/* keep the walking figures centred: when cropped (wide window) the top is cut more than the bottom */
+.hero--home { background-position: center 70%; }
 
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
